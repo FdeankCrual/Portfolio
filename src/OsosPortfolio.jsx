@@ -265,8 +265,8 @@ function StickyHero() {
                  transition={{ delay: 2, duration: 0.8, type: 'spring' }}
                  style={{
                    position: 'absolute',
-                   bottom: '20px',
-                   right: '20px',
+                   bottom: '-15px',  /* Centers it vertically with the dot */
+                   left: '30px',     /* Pushes it into the open space on the right */
                    backgroundColor: 'rgba(17, 17, 17, 0.85)',
                    backdropFilter: 'blur(10px)',
                    padding: '0.8rem 1.2rem',
