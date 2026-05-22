@@ -286,8 +286,8 @@ function StickyHero() {
                {/* Pulsing indicator dot (Pinned exactly to cup) */}
                <div style={{ position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', transform: 'translate(-50%, -50%)' }}>
                  <motion.div 
-                   animate={{ scale: [1, 2.5], opacity: [0.8, 0] }} 
-                   transition={{ duration: 1.5, repeat: Infinity }}
+                   animate={{ scale: [0.5, 3], opacity: [0.6, 0] }} 
+                   transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
                    style={{ position: 'absolute', width: '12px', height: '12px', backgroundColor: '#E07A5F', borderRadius: '50%' }}
                  />
                  <div style={{ width: '6px', height: '6px', backgroundColor: '#E07A5F', borderRadius: '50%', zIndex: 1 }}></div>
