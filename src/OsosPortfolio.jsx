@@ -239,7 +239,7 @@ function StickyHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
         >
-          <div style={{ position: 'relative', height: '85vh', pointerEvents: 'auto' }}>
+          <div style={{ position: 'relative', height: '85vh', display: 'inline-block', pointerEvents: 'auto' }}>
             <img 
               src="portrait.png" 
               alt="Portrait" 
@@ -248,51 +248,56 @@ function StickyHero() {
                 e.target.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop"; 
               }}
               style={{ 
-                height: '100%', objectFit: 'contain', objectPosition: 'bottom',
+                height: '100%', width: 'auto', objectFit: 'contain', objectPosition: 'bottom',
                 maskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
                 WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 15%)',
               }} 
             />
 
-            {/* Funny Tea Marker */}
-            <motion.div 
-               className="tea-marker"
-               initial={{ opacity: 0, scale: 0, rotate: -10 }}
-               animate={{ opacity: 1, scale: 1, rotate: 0 }}
-               transition={{ delay: 2, duration: 0.8, type: 'spring' }}
-               style={{
-                 position: 'absolute',
-                 top: '55%',   /* Adjust this percentage to move up/down */
-                 left: '25%',  /* Adjust this percentage to move left/right */
-                 backgroundColor: 'rgba(17, 17, 17, 0.85)',
-                 backdropFilter: 'blur(10px)',
-                 padding: '0.8rem 1.2rem',
-                 borderRadius: '20px',
-                 border: '1px solid #444',
-                 color: '#f6f4f0',
-                 fontSize: '0.85rem',
-                 fontWeight: 600,
-                 display: 'flex',
-                 alignItems: 'center',
-                 gap: '0.8rem',
-                 boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                 cursor: 'pointer',
-                 zIndex: 10
-               }}
-            >
-               <span style={{ fontSize: '1.2rem' }}>☕</span>
-               <span>Fuel to keep me active 24/7</span>
+            {/* Funny Tea Marker Container (Centered perfectly on the cup) */}
+            <div style={{ position: 'absolute', top: '70%', left: '71%', zIndex: 10 }}>
                
-               {/* Pulsing indicator dot */}
-               <div style={{ position: 'absolute', bottom: '-15px', right: '-15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+               {/* The Tooltip Box (Floats up and to the left) */}
+               <motion.div 
+                 className="tea-marker"
+                 initial={{ opacity: 0, scale: 0, rotate: -10 }}
+                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                 transition={{ delay: 2, duration: 0.8, type: 'spring' }}
+                 style={{
+                   position: 'absolute',
+                   bottom: '20px',
+                   right: '20px',
+                   backgroundColor: 'rgba(17, 17, 17, 0.85)',
+                   backdropFilter: 'blur(10px)',
+                   padding: '0.8rem 1.2rem',
+                   borderRadius: '20px',
+                   border: '1px solid #444',
+                   color: '#f6f4f0',
+                   fontSize: '0.85rem',
+                   fontWeight: 600,
+                   display: 'flex',
+                   alignItems: 'center',
+                   gap: '0.8rem',
+                   boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                   cursor: 'pointer',
+                   whiteSpace: 'nowrap'
+                 }}
+               >
+                 <span style={{ fontSize: '1.2rem' }}>☕</span>
+                 <span>Fuel to keep me active 24/7</span>
+               </motion.div>
+
+               {/* Pulsing indicator dot (Pinned exactly to 70%, 71%) */}
+               <div style={{ position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', transform: 'translate(-50%, -50%)' }}>
                  <motion.div 
-                   animate={{ scale: [1, 2], opacity: [1, 0] }} 
+                   animate={{ scale: [1, 2.5], opacity: [1, 0] }} 
                    transition={{ duration: 1.5, repeat: Infinity }}
-                   style={{ position: 'absolute', width: '10px', height: '10px', backgroundColor: '#E07A5F', borderRadius: '50%' }}
+                   style={{ position: 'absolute', width: '12px', height: '12px', backgroundColor: '#E07A5F', borderRadius: '50%' }}
                  />
                  <div style={{ width: '8px', height: '8px', backgroundColor: '#E07A5F', borderRadius: '50%', zIndex: 1 }}></div>
                </div>
-            </motion.div>
+
+            </div>
           </div>
         </motion.div>
 
