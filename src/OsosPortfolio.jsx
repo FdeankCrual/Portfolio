@@ -254,47 +254,43 @@ function StickyHero() {
               }} 
             />
 
-            {/* Funny Tea Marker Container (Centered perfectly on the cup) */}
+            {/* Minimalist Tea Marker (Mobile Optimized) */}
             <div style={{ position: 'absolute', top: '70%', left: '71%', zIndex: 10 }}>
                
-               {/* The Tooltip Box (Floats up and to the left) */}
+               {/* Sleek Text Pointer (Points to the LEFT, over the dark suit to avoid mobile overflow) */}
                <motion.div 
-                 className="tea-marker"
-                 initial={{ opacity: 0, scale: 0, rotate: -10 }}
-                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                 transition={{ delay: 2, duration: 0.8, type: 'spring' }}
+                 initial={{ opacity: 0, x: 20 }}
+                 animate={{ opacity: 1, x: 0 }}
+                 transition={{ delay: 2, duration: 0.8, ease: "easeOut" }}
                  style={{
                    position: 'absolute',
-                   bottom: '-15px',  /* Centers it vertically with the dot */
-                   left: '30px',     /* Pushes it into the open space on the right */
-                   backgroundColor: 'rgba(17, 17, 17, 0.85)',
-                   backdropFilter: 'blur(10px)',
-                   padding: '0.8rem 1.2rem',
-                   borderRadius: '20px',
-                   border: '1px solid #444',
+                   bottom: '-8px',
+                   right: '25px', /* Pushes the text to the left side of the dot */
                    color: '#f6f4f0',
-                   fontSize: '0.85rem',
-                   fontWeight: 600,
+                   fontSize: '0.75rem',
+                   fontWeight: 500,
+                   letterSpacing: '1px',
+                   textTransform: 'uppercase',
                    display: 'flex',
                    alignItems: 'center',
-                   gap: '0.8rem',
-                   boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                   cursor: 'pointer',
-                   whiteSpace: 'nowrap'
+                   gap: '1rem',
+                   whiteSpace: 'nowrap',
+                   pointerEvents: 'none'
                  }}
                >
-                 <span style={{ fontSize: '1.2rem' }}>☕</span>
-                 <span>Fuel to keep me active 24/7</span>
+                 <span style={{ opacity: 0.8 }}>Fuel to keep me active 24/7</span>
+                 {/* Connecting horizontal line */}
+                 <div style={{ width: '40px', height: '1px', backgroundColor: 'rgba(246, 244, 240, 0.4)' }}></div>
                </motion.div>
 
-               {/* Pulsing indicator dot (Pinned exactly to 70%, 71%) */}
+               {/* Pulsing indicator dot (Pinned exactly to cup) */}
                <div style={{ position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', transform: 'translate(-50%, -50%)' }}>
                  <motion.div 
-                   animate={{ scale: [1, 2.5], opacity: [1, 0] }} 
+                   animate={{ scale: [1, 2.5], opacity: [0.8, 0] }} 
                    transition={{ duration: 1.5, repeat: Infinity }}
                    style={{ position: 'absolute', width: '12px', height: '12px', backgroundColor: '#E07A5F', borderRadius: '50%' }}
                  />
-                 <div style={{ width: '8px', height: '8px', backgroundColor: '#E07A5F', borderRadius: '50%', zIndex: 1 }}></div>
+                 <div style={{ width: '6px', height: '6px', backgroundColor: '#E07A5F', borderRadius: '50%', zIndex: 1 }}></div>
                </div>
 
             </div>
