@@ -240,7 +240,7 @@ function StickyHero() {
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
         >
           <img 
-            src="/portrait.png" 
+            src="portrait.png" 
             alt="Portrait" 
             onError={(e) => { 
               e.target.onerror = null; 
@@ -321,25 +321,25 @@ function HorizontalProjects() {
            <ProjectCard 
              title="Eye Tracking Control" 
              desc="Engineered an accessibility system mapping eye movements and blink clicks to control computer navigation." 
-             imgSrc="/eye.png"
+             imgSrc="eye.png"
              status="COMPLETED"
            />
            <ProjectCard 
              title="Pitch Analytics ML" 
              desc="Developed a machine learning application designed to track and analyze football movements on the pitch." 
-             imgSrc="/football.png"
+             imgSrc="football.png"
              status="COMPLETED"
            />
            <ProjectCard 
              title="Shows Watchlist System" 
              desc="Created a database application utilizing Python and MySQL to efficiently manage media consumption." 
-             imgSrc="/watchlist.png"
+             imgSrc="watchlist.png"
              status="COMPLETED"
            />
            <ProjectCard 
              title="Machine Learning Chess" 
              desc="Currently building a chess engine from scratch. Training an ML model to act as my opponent to master Python and Machine Learning fundamentals." 
-             imgSrc="/chess.png"
+             imgSrc="chess.png"
              status="CURRENTLY BUILDING"
              link="https://github.com/FdeankCrual/Learning_stay_tuned"
              linkText="View on GitHub"
@@ -347,7 +347,7 @@ function HorizontalProjects() {
            <ProjectCard 
              title="Jarvis Assistant Vision" 
              desc="Upcoming project: A natural language AI assistant that understands context and reacts intelligently to facial and hand gestures via camera vision." 
-             imgSrc="/jarvis.png"
+             imgSrc="jarvis.png"
              status="FUTURE PROJECT"
            />
 
