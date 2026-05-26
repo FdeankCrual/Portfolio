@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- CDN Preconnects for faster loading -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://unpkg.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Hines — A global real estate investment, development, and management firm. $91.8B+ AUM, 30+ countries, 1600+ developments.">
+  <title>Hines — Global Real Estate Investment & Development</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="final.css">
+</head>
+<body>
+
+  <canvas class="webgl" id="webgl"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">HINES<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#global">Global</a></li>
+        <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-text" aria-hidden="true">HINES</div>
+    <div class="container hero-grid">
+      <div class="hero-left">
+        <div class="eyebrow anim-fade-up">Global Real Estate Platform · Est. 1957</div>
+        <h1 class="anim-fade-up delay-1">
+          Where Vision<br>Becomes<br><em>Landmark.</em>
+        </h1>
+        <p class="anim-fade-up delay-2">Hines invests in, develops, and manages exceptional real estate in 30+ countries — transforming cities and creating enduring value for investors and communities alike.</p>
+        <div class="hero-btns anim-fade-up delay-3">
+          <a href="#projects" class="btn btn-dark">Explore Portfolio</a>
+          <a href="#about" class="btn btn-outline">Our Story</a>
+        </div>
+      </div>
+      <div class="hero-right anim-fade-up delay-2">
+        <div class="glass-card tilt-card" id="heroCard">
+          <div class="glass-card-tag">Featured Development</div>
+          <h3>Texas Tower</h3>
+          <p>47-story trophy office tower in downtown Houston. Column-free floor plates with 360° city views.</p>
+          <div class="metric-row">
+            <div class="metric"><span class="metric-num" data-count="47">0</span><span class="metric-unit">F</span><div class="metric-lbl">Floors</div></div>
+            <div class="metric"><span class="metric-num" data-count="1.7">0</span><span class="metric-unit">M</span><div class="metric-lbl">Sq Ft</div></div>
+            <div class="metric"><span class="metric-num" data-count="2022">0</span><div class="metric-lbl">Year</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- STATS TICKER -->
+  <div class="stats-band">
+    <div class="stats-band-inner">
+      <div class="stat-block"><span class="stat-big counter" data-target="91.8" data-suffix="B+">$0</span><span class="stat-desc">AUM</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-block"><span class="stat-big counter" data-target="30" data-suffix="+">0</span><span class="stat-desc">Countries</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-block"><span class="stat-big counter" data-target="1600" data-suffix="+">0</span><span class="stat-desc">Developments</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-block"><span class="stat-big counter" data-target="4600" data-suffix="+">0</span><span class="stat-desc">Employees</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-block"><span class="stat-big counter" data-target="68" data-suffix=" Yrs">0</span><span class="stat-desc">Experience</span></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="section about-section" id="about">
+    <div class="container about-grid">
+      <div class="about-visual reveal">
+        <div class="about-img-stack">
+          <div class="about-img-card glass-card no-pad">
+            <div class="about-img-placeholder about-img-1">
+              <div class="building-lines" aria-hidden="true">
+                <div class="bl-line"></div><div class="bl-line"></div><div class="bl-line"></div><div class="bl-line"></div><div class="bl-line"></div><div class="bl-line"></div><div class="bl-line"></div><div class="bl-line"></div>
+              </div>
+              <div class="about-img-label">Texas Tower · Houston</div>
+            </div>
+          </div>
+          <div class="about-badge glass-card reveal reveal-delay-1">
+            <div class="about-badge-num">$91.8B+</div>
+            <div class="about-badge-txt">Global Assets Under Management</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text">
+        <div class="eyebrow reveal">Our Story</div>
+        <h2 class="reveal reveal-delay-1">Shaping Cities &<br><em>Communities</em><br>Since 1957</h2>
+        <p class="reveal reveal-delay-2">Founded by Gerald D. Hines in Houston, Texas, we began with a single office building and a commitment to uncompromising quality. Today, that ethos guides every project across 30+ countries.</p>
+        <p class="reveal reveal-delay-3">We don't just build real estate — we create enduring places that redefine their surroundings, inspire their occupants, and stand the test of time as benchmarks for others.</p>
+        <a href="#services" class="btn btn-dark reveal reveal-delay-3">What We Do →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section services-section" id="services">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow reveal">What We Do</div>
+        <h2 class="reveal reveal-delay-1">End-to-End Real Estate<br><em>Excellence</em></h2>
+        <p class="reveal reveal-delay-2">From capital strategy through asset management — Hines covers the full lifecycle of exceptional real estate.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card glass-card reveal">
+          <div class="svc-icon">
+            <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.5"/><path d="M16 32l4-12 4 8 4-6 4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="svc-num">01</div>
+          <h3>Investment Management</h3>
+          <p>Strategic capital deployment across global real estate markets — equities, debt, and alternative strategies, backed by proprietary data and deep market expertise.</p>
+          <a href="service-investment.html" class="svc-link">Learn More →</a>
+        </div>
+        <div class="service-card glass-card reveal reveal-delay-1">
+          <div class="svc-icon">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="20" width="32" height="22" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4 20l20-14 20 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="19" y="30" width="10" height="12" stroke="currentColor" stroke-width="1.5"/></svg>
+          </div>
+          <div class="svc-num">02</div>
+          <h3>Real Estate Development</h3>
+          <p>Creating landmark properties that transform skylines and define communities. From concept to completion, we deliver the buildings that become benchmarks.</p>
+          <a href="service-development.html" class="svc-link">Learn More →</a>
+        </div>
+        <div class="service-card glass-card reveal reveal-delay-2">
+          <div class="svc-icon">
+            <svg viewBox="0 0 48 48" fill="none"><path d="M24 4l18 8v12c0 10-8 18-18 20C14 42 6 34 6 24V12l18-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M16 24l5 5 11-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="svc-num">03</div>
+          <h3>Property Management</h3>
+          <p>Best-in-class operations and tenant services that maximise asset performance, occupant experience, and long-term value of every property under our care.</p>
+          <a href="service-management.html" class="svc-link">Learn More →</a>
+        </div>
+        <div class="service-card glass-card reveal reveal-delay-3">
+          <div class="svc-icon">
+            <svg viewBox="0 0 48 48" fill="none"><path d="M24 6v36M12 14h24M10 24h28M12 34h24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="svc-num">04</div>
+          <h3>Asset Management</h3>
+          <p>Optimising returns through active repositioning, rigorous financial oversight, and strategic value-creation initiatives tailored for each asset and market cycle.</p>
+          <a href="service-asset.html" class="svc-link">Learn More →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section projects-section" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow reveal">Landmark Projects</div>
+        <h2 class="reveal reveal-delay-1">Developments That<br><em>Define Skylines</em></h2>
+      </div>
+    </div>
+
+    <!-- Scrolling project showcase -->
+    <div class="projects-showcase">
+
+      <div class="project-row">
+        <div class="project-info glass-card">
+          <div class="proj-location">Houston, USA · 2022</div>
+          <h3>Texas Tower</h3>
+          <p>A 47-story, 1.7M sq ft column-free trophy office tower with a pioneering core-free structural design offering 360° panoramic views of downtown Houston.</p>
+          <ul class="proj-facts">
+            <li><strong>Type</strong>Commercial Office</li>
+            <li><strong>Size</strong>1.7M sq ft</li>
+            <li><strong>Floors</strong>47</li>
+          </ul>
+        </div>
+        <div class="project-visual">
+          <div class="proj-graphic tower-graphic">
+            <div class="tower-wrap">
+              <div class="tower-body">
+                <div class="tower-floors"></div>
+                <div class="tower-top"></div>
+              </div>
+            </div>
+            <div class="proj-city-name">Houston</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-row project-row-flip">
+        <div class="project-info glass-card">
+          <div class="proj-location">San Francisco, USA · 2019</div>
+          <h3>The Avery</h3>
+          <p>A 56-story luxury residential tower offering 118 ultra-luxury condominiums with panoramic bay views and interiors designed by Orlando Diaz-Azcuy.</p>
+          <ul class="proj-facts">
+            <li><strong>Type</strong>Luxury Residential</li>
+            <li><strong>Size</strong>465K sq ft</li>
+            <li><strong>Floors</strong>56</li>
+          </ul>
+        </div>
+        <div class="project-visual">
+          <div class="proj-graphic residential-graphic">
+            <div class="res-tower-wrap">
+              <div class="res-body"></div>
+              <div class="res-balconies"></div>
+            </div>
+            <div class="proj-city-name">San Francisco</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-row">
+        <div class="project-info glass-card">
+          <div class="proj-location">Shanghai, China · 2018</div>
+          <h3>One Museum Place</h3>
+          <p>A 60-story mixed-use landmark in Jing'an District featuring Grade A office space, luxury retail, and a five-star hotel by Kenzo Tange Associates.</p>
+          <ul class="proj-facts">
+            <li><strong>Type</strong>Mixed-Use</li>
+            <li><strong>Size</strong>2.1M sq ft</li>
+            <li><strong>Floors</strong>60</li>
+          </ul>
+        </div>
+        <div class="project-visual">
+          <div class="proj-graphic mixed-graphic">
+            <div class="mixed-towers">
+              <div class="mixed-t1"></div>
+              <div class="mixed-t2"></div>
+            </div>
+            <div class="proj-city-name">Shanghai</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GLOBAL -->
+  <section class="section global-section" id="global">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow reveal">Our Reach</div>
+        <h2 class="reveal reveal-delay-1">Operating Across<br><em>30+ Countries</em></h2>
+        <p class="reveal reveal-delay-2">Deep local expertise backed by a global institutional platform spanning every major real estate market.</p>
+      </div>
+      <div class="regions-grid">
+        <div class="region-card glass-card reveal">
+          <div class="region-icon">🌎</div>
+          <h4>Americas</h4>
+          <p>United States · Canada · Mexico · Brazil · Chile</p>
+          <div class="region-stat">25+ offices</div>
+        </div>
+        <div class="region-card glass-card reveal reveal-delay-1">
+          <div class="region-icon">🌍</div>
+          <h4>Europe</h4>
+          <p>United Kingdom · Germany · France · Spain · Italy · Poland</p>
+          <div class="region-stat">30+ offices</div>
+        </div>
+        <div class="region-card glass-card reveal reveal-delay-2">
+          <div class="region-icon">🌏</div>
+          <h4>Asia-Pacific</h4>
+          <p>China · Australia · Japan · India · South Korea</p>
+          <div class="region-stat">15+ offices</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUSTAINABILITY STRIP -->
+  <div class="sustain-strip reveal">
+    <div class="container">
+      <div class="sustain-inner">
+        <div class="sustain-icon">🌿</div>
+        <div class="sustain-text">
+          <strong>Committed to Net Zero</strong>
+          <span>Hines is one of the few global real estate firms with a commitment to net zero carbon by 2040 across all managed assets.</span>
+        </div>
+        <a href="#" class="btn btn-dark">ESG Report →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section class="section contact-section" id="contact">
+    <div class="container">
+      <div class="contact-card glass-card reveal">
+        <div class="eyebrow">Partner With Hines</div>
+        <h2>Let's Shape the Future<br>of <em>Real Estate Together.</em></h2>
+        <p>Connect with our team to explore investment opportunities, development partnerships, and property management solutions globally.</p>
+        <div class="contact-btns">
+          <a href="mailto:info@hines.com" class="btn btn-dark">Contact Our Team →</a>
+          <a href="#" class="btn btn-outline">View Careers</a>
+        </div>
+        <div class="contact-details">
+          <div class="contact-detail"><span class="cd-icon">📍</span><div><strong>Headquarters</strong><p>Houston, Texas</p></div></div>
+          <div class="contact-detail"><span class="cd-icon">✉️</span><div><strong>Email</strong><p>info@hines.com</p></div></div>
+          <div class="contact-detail"><span class="cd-icon">📞</span><div><strong>Phone</strong><p>+1 (713) 621-8000</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <div class="nav-logo" style="font-size:1.3rem">HINES<span style="color:#dc2626">.</span></div>
+        <p>A global real estate investment, development, and property management firm shaping cities since 1957.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="#about">About Hines</a>
+        <a href="#">Leadership</a>
+        <a href="#">Careers</a>
+        <a href="#">Newsroom</a>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <a href="service-investment.html">Investment</a>
+        <a href="service-development.html">Development</a>
+        <a href="service-management.html">Management</a>
+        <a href="#">Sustainability</a>
+      </div>
+      <div class="footer-col">
+        <h5>Connect</h5>
+        <a href="#contact">Contact Us</a>
+        <a href="#">Investor Portal</a>
+        <a href="#">Tenant Portal</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Hines. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- GSAP + ScrollTrigger + Lenis -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
+  <script type="importmap">
+    {"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}
+  </script>
+  <script type="module" src="final.js"></script>
+</body>
+</html>
