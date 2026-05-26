@@ -1,0 +1,937 @@
+@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swarm DNA | Intelligent Assembly</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            overflow-x: hidden;
+            margin: 0;
+            scroll-behavior: smooth;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            /* Keep media query for default behaviors if class isn't applied but normally we rely on class now */
+        }
+
+        .dark body {
+            background-color: #030712;
+            color: #f8fafc;
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+
+
+        .content-section {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+            padding: 5vh 5%;
+            /* Reduced padding for mobile */
+            pointer-events: none;
+        }
+
+        @media (min-width: 768px) {
+            .content-section {
+                padding: 5vh 10%;
+            }
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 24px;
+            padding: 2rem;
+            /* Mobile padding */
+            max-width: 100%;
+            /* Full width on mobile */
+            opacity: 0.2;
+            transform: scale(0.95);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.05);
+            pointer-events: auto;
+        }
+
+        @media (min-width: 768px) {
+            .info-card {
+                padding: 3.5rem;
+                max-width: 450px;
+            }
+        }
+
+        .is-active .info-card {
+            opacity: 1;
+            transform: scale(1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(56, 189, 248, 0.6);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.15);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            /* Keep media query for default behaviors if class isn't applied but normally we rely on class now */
+        }
+
+        .dark .info-card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .dark .is-active .info-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.15);
+        }
+
+        .align-right {
+            justify-content: center;
+        }
+
+        /* Center on mobile by default */
+        .align-left {
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .align-right {
+                justify-content: flex-end;
+            }
+
+            .align-left {
+                justify-content: flex-start;
+            }
+        }
+
+        .glow-text {
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Abstract thematic accents */
+        .theme-cyan .is-active .info-card {
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 50px rgba(56, 189, 248, 0.1);
+        }
+
+        .theme-pink .is-active .info-card {
+            border-color: rgba(244, 114, 182, 0.4);
+            box-shadow: 0 0 50px rgba(244, 114, 182, 0.1);
+        }
+
+        .theme-emerald .is-active .info-card {
+            border-color: rgba(52, 211, 153, 0.4);
+            box-shadow: 0 0 50px rgba(52, 211, 153, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Navigation Header -->
+    <header id="main-header"
+        class="fixed top-0 left-0 w-full z-50 border-b border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="header-container" class="flex justify-between items-center h-20 transition-all duration-300">
+                <div class="flex items-center">
+                    <a href="index.html"
+                        class="text-3xl font-serif font-bold text-sky-600 dark:text-sky-400 tracking-tight flex items-center gap-2">
+                        <div
+                            class="w-8 h-8 bg-sky-600 dark:bg-sky-400 rounded-full flex items-center justify-center text-white text-lg leading-none">
+                            W</div>
+                        elocity
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-10 items-center">
+                    <a href="index.html"
+                        class="nav-link text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400 font-bold transition">Home</a>
+                    <a href="about-us.html"
+                        class="nav-link text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400 font-bold transition">About
+                        Us</a>
+                    <a href="advanced-dna-testing.html"
+                        class="nav-link text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400 font-bold transition">DNA
+                        Test</a>
+                    <a href="contact-us.html"
+                        class="nav-link text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400 font-bold transition">Contact</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <!-- Dark mode toggle -->
+                    <button id="theme-toggle"
+                        class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition text-slate-500 dark:text-slate-400">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 01-1.415 1.415l-.708-.708a1 1 0 011.415-1.415l.708.708zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM15.78 15.78a1 1 0 011.415-1.415l.708.708a1 1 0 01-1.415 1.415l-.708-.708zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-4.22a1 1 0 011.415-1.415l.708.708a1 1 0 01-1.415 1.415l-.708-.708zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zM4.22 4.22a1 1 0 011.415-1.415l.708.708a1 1 0 01-1.415 1.415l-.708-.708zM10 5a5 5 0 100 10 5 5 0 000-10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <!-- Mobile Menu toggle -->
+                    <button id="mobile-menu-btn"
+                        class="md:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    <!-- Buy App -->
+                    <a href="advanced-dna-testing.html"
+                        class="hidden sm:inline-block bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-6 rounded-full transition duration-200 shadow-[0_0_20px_rgba(14,165,233,0.4)]">
+                        Buy DNA Test
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-6">
+                <nav class="flex flex-col space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                    <a href="index.html"
+                        class="text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 font-bold hover:text-sky-500 transition">Home</a>
+                    <a href="about-us.html"
+                        class="text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 font-bold hover:text-sky-500 transition">About
+                        Us</a>
+                    <a href="advanced-dna-testing.html"
+                        class="text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 font-bold hover:text-sky-500 transition">DNA
+                        Test</a>
+                    <a href="contact-us.html"
+                        class="text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 font-bold hover:text-sky-500 transition">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main id="scroll-container" class="pt-20">
+
+        <!-- Section 1: Helix -->
+        <section class="content-section" data-shape="helix">
+            <div class="info-card"
+                style="margin: 0 auto; text-align: center; max-width: 800px; border-color: transparent; background: transparent; box-shadow: none;">
+                <h1 class="text-4xl md:text-6xl font-light tracking-tight mb-4 text-slate-900 dark:text-white">Is your
+                    <br><span class="font-bold glow-text">Lifestyle</span> a risk?
+                </h1>
+                <p class="text-slate-600 dark:text-slate-400 font-light text-base md:text-xl leading-relaxed mb-6">
+                    Genetic susceptibility and adoption of a high-calorie low-activity lifestyle is a fatal combination
+                    for multiple life-threatening disorders and premature death amongst India's growing middle class.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://welocitygenetics.com/website/welocity-genetics-advanced-dna-testing-program.aspx"
+                        target="_blank"
+                        class="bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200 transition px-6 md:px-8 py-3 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase w-full sm:w-auto">Buy
+                        DNA Test</a>
+                    <a href="https://youtu.be/rbrSdxTKW7Y" target="_blank"
+                        class="border border-slate-900 text-slate-900 dark:border-white dark:text-white hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 transition px-6 md:px-8 py-3 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-2 w-full sm:w-auto">Watch
+                        Video <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Sphere (Health Risks) -->
+        <section class="content-section align-left theme-cyan" data-shape="sphere" id="sec-1">
+            <div class="info-card md:max-w-[550px] text-center md:text-left">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-wide text-slate-800 dark:text-white mb-2 md:mb-4">
+                    Predict Your Health Risks</h2>
+                <h3 class="text-lg md:text-xl font-medium text-sky-500 mb-4 md:mb-6">at the Genetic Level</h3>
+                <p class="text-slate-600 dark:text-slate-300 font-light text-sm md:text-base leading-relaxed mb-6">
+                    Opt for Once-in-a-Lifetime Comprehensive Genetic(DNA) Mapping to decode the secrets of gene-based
+                    healthy living.
+                </p>
+                <div class="grid grid-cols-2 gap-2 md:gap-3 mb-6">
+                    <a href="https://welocitygenetics.com/website/diabetes.aspx" target="_blank"
+                        class="text-xs md:text-sm border border-slate-300 dark:border-slate-600 rounded-lg p-2 text-center hover:border-sky-400 hover:text-sky-500 transition bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">Diabetes</a>
+                    <a href="https://welocitygenetics.com/website/cardiac-health.aspx" target="_blank"
+                        class="text-xs md:text-sm border border-slate-300 dark:border-slate-600 rounded-lg p-2 text-center hover:border-sky-400 hover:text-sky-500 transition bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">Cardiac</a>
+                    <a href="https://welocitygenetics.com/website/weight-management.aspx" target="_blank"
+                        class="text-xs md:text-sm border border-slate-300 dark:border-slate-600 rounded-lg p-2 text-center hover:border-sky-400 hover:text-sky-500 transition bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">Weight
+                        Mgmt</a>
+                    <a href="https://welocitygenetics.com/website/smart-kid.aspx" target="_blank"
+                        class="text-xs md:text-sm border border-slate-300 dark:border-slate-600 rounded-lg p-2 text-center hover:border-sky-400 hover:text-sky-500 transition bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">Smart
+                        Kids</a>
+                    <a href="https://welocitygenetics.com/website/healthy-woman.aspx" target="_blank"
+                        class="text-xs md:text-sm border border-slate-300 dark:border-slate-600 rounded-lg p-2 text-center hover:border-sky-400 hover:text-sky-500 transition bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">Healthy
+                        Women</a>
+                    <a href="https://welocitygenetics.com/website/comprehensive.aspx" target="_blank"
+                        class="text-xs md:text-sm border border-slate-300 dark:border-slate-600 rounded-lg p-2 text-center hover:border-sky-400 hover:text-sky-500 transition bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">Comprehensive</a>
+                </div>
+                <button
+                    class="bg-sky-50 dark:bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-300 dark:border-sky-500/50 hover:bg-sky-500 hover:text-white transition px-6 py-2 md:py-3 rounded-full text-xs md:text-sm font-semibold tracking-widest w-full">EXPLORE
+                    MAPPING</button>
+            </div>
+        </section>
+
+        <!-- Section 3: Diamond (Crack Genetic Code) -->
+        <section class="content-section align-right theme-pink" data-shape="diamond" id="sec-2">
+            <div class="info-card md:max-w-[550px] text-center md:text-left">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-wide text-slate-800 dark:text-white mb-2">Crack Your
+                    Genetic Code</h2>
+                <h3 class="text-base md:text-lg font-medium text-pink-500 mb-4">Have You Done Your Comprehensive DNA
+                    Test?</h3>
+                <p class="text-slate-600 dark:text-slate-300 font-light leading-relaxed mb-4 text-xs md:text-sm">
+                    Find out your Genetic Predisposition for various existing as well as Future Health Risks and Get
+                    Personalized Gene-based Dietary Interventions and Smart Lifestyle Modifications by our Experienced
+                    Genomic Wellness Counselors.
+                </p>
+                <ul class="space-y-2 mb-6 text-xs md:text-sm text-slate-700 dark:text-slate-400 text-left">
+                    <li class="flex items-start gap-2"><span
+                            class="text-pink-500 text-base md:text-lg leading-none">•</span> Ideal for individuals with
+                        diabetic/prediabetic conditions.</li>
+                    <li class="flex items-start gap-2"><span
+                            class="text-pink-500 text-base md:text-lg leading-none">•</span> Ideal for individuals with
+                        Cardio Vascular Diseases.</li>
+                    <li class="flex items-start gap-2"><span
+                            class="text-pink-500 text-base md:text-lg leading-none">•</span> Learn the secrets of ideal
+                        Weight Management</li>
+                    <li class="flex items-start gap-2"><span
+                            class="text-pink-500 text-base md:text-lg leading-none">•</span> Catch them young for a
+                        healthy & glorious future</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 4: Torus (Food Medicine) -->
+        <section class="content-section align-left theme-emerald" data-shape="torus" id="sec-3">
+            <div class="info-card text-center md:text-left">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-wide text-slate-800 dark:text-white mb-2 md:mb-4">Let
+                    Food Be<br>Thy Medicine</h2>
+                <h3 class="text-lg md:text-xl font-medium text-emerald-500 mb-4 md:mb-6">Master the Art & Science of
+                    Eating Right</h3>
+                <p class="text-slate-600 dark:text-slate-300 font-light text-sm md:text-base leading-relaxed mb-6">
+                    Allow us to curate your Personalized Gene-Based Diet Plan. Fuel your body with the exact nutrients
+                    your unique DNA profile requires for optimal metabolic performance.
+                </p>
+                <button
+                    class="bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-500/50 hover:bg-emerald-500 hover:text-white transition px-6 py-2 md:py-3 rounded-full text-xs md:text-sm font-semibold tracking-widest w-full">PERSONALIZE
+                    MY DIET</button>
+            </div>
+        </section>
+
+        <!-- Section 5: Network (Professional) -->
+        <section class="content-section align-right theme-cyan" data-shape="network" id="sec-4">
+            <div class="info-card md:max-w-[550px] text-center md:text-left">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-wide text-slate-800 dark:text-white mb-2 md:mb-4">
+                    Genomic Wellness Pro</h2>
+                <p
+                    class="text-slate-600 dark:text-slate-300 font-light text-sm md:text-base leading-relaxed mb-4 md:mb-6">
+                    Committed to Create passionate Genomic Wellness Professionals to Make Positive Contributions in an
+                    Illness World and serve humanity as Informed Genetics Professionals.
+                </p>
+                <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-3 md:p-4 mb-4 md:mb-6">
+                    <p class="text-xs md:text-sm text-slate-700 dark:text-slate-400 font-medium md:mb-2">Welocity
+                        Genetics is a premium gene based wellness company thoughtfully established to nurture precious
+                        human life.</p>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <a href="https://mywignet.com/" target="_blank"
+                        class="bg-sky-50 dark:bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-300 dark:border-sky-500/50 hover:bg-sky-500 hover:text-white transition px-6 py-2 md:py-3 rounded-full text-xs md:text-sm font-semibold tracking-widest text-center">JOIN
+                        NETWORK</a>
+                    <a href="https://welocitygenetics.com/website/adminlogin.aspx" target="_blank"
+                        class="text-center text-xs md:text-sm text-slate-500 hover:text-sky-500 transition">Admin
+                        Login</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer buffer removed, adding real footer -->
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact"
+        class="relative z-10 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pt-16 pb-8 transition-colors duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div
+                class="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-16 p-8 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800/80 backdrop-blur-sm">
+
+                <div class="md:col-span-12 lg:col-span-5">
+                    <a href="#"
+                        class="text-2xl font-serif font-bold text-sky-600 dark:text-sky-400 tracking-tight flex items-center gap-2 mb-6">
+                        <div
+                            class="w-8 h-8 bg-sky-600 dark:bg-sky-400 rounded-full flex items-center justify-center text-white text-lg leading-none">
+                            W</div>
+                        elocity
+                    </a>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 max-w-sm leading-relaxed">
+                        Welocity Genetics is a premium gene-based wellness company thoughtfully established to nurture
+                        precious human life.
+                    </p>
+                    <div class="space-y-3 text-sm text-slate-800 dark:text-slate-300 font-semibold">
+                        <p class="flex items-center"><svg class="w-5 h-5 mr-3 text-sky-500" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                </path>
+                            </svg> info@welocitygenetics.com</p>
+                        <p class="flex items-center"><svg class="w-5 h-5 mr-3 text-sky-500" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
+                                </path>
+                            </svg> 730 430 5295</p>
+                    </div>
+                </div>
+
+                <div class="md:col-span-6 lg:col-span-3">
+                    <h4 class="text-lg font-bold text-slate-800 dark:text-white mb-6">Policies & Support</h4>
+                    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400 font-medium">
+                        <li><a href="https://welocitygenetics.com/website/terms-conditions.aspx"
+                                class="hover:text-sky-500 transition">Terms & Conditions</a></li>
+                        <li><a href="https://welocitygenetics.com/website/privacy-policy.aspx"
+                                class="hover:text-sky-500 transition">Privacy Policy</a></li>
+                        <li><a href="https://welocitygenetics.com/website/Dilivery-Shipping-Policy.aspx"
+                                class="hover:text-sky-500 transition">Delivery & Shipping</a></li>
+                        <li><a href="https://welocitygenetics.com/website/refund-return-policy.aspx"
+                                class="hover:text-sky-500 transition">Refund Policy</a></li>
+                        <li><a href="https://welocitygenetics.com/website/faqs.aspx"
+                                class="hover:text-sky-500 transition">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-6 lg:col-span-4">
+                    <h4 class="text-lg font-bold text-slate-800 dark:text-white mb-6">Helpful Links</h4>
+                    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400 font-medium">
+                        <li><a href="https://welocitygenetics.com/website/welocity-genetics-advanced-dna-testing-program.aspx"
+                                class="hover:text-sky-500 transition">Advanced DNA Test</a></li>
+                        <li><a href="https://welocitygenetics.com/website/advantage-nutrigenomics.aspx"
+                                class="hover:text-sky-500 transition">Advantage Nutrigenomics</a></li>
+                        <li><a href="https://welocitygenetics.com/website/the-science-of-epigenetics.aspx"
+                                class="hover:text-sky-500 transition">Science of Epigenetics</a></li>
+                        <li><a href="https://welocitygenetics.com/website/rise-of-pharmacogeneomics.aspx"
+                                class="hover:text-sky-500 transition">Pharmacogenomics</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500 dark:text-slate-500 border-t border-slate-200 dark:border-slate-800 pt-8">
+                <p>© 2026 Welocity Genetics. All rights reserved.</p>
+                <div class="mt-4 md:mt-0">
+                    <p>Designed for Genomic Wellness.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Setup Three.js
+        const canvas = document.getElementById('webgl-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // performance
+
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0xf8fafc, 0.02); // Initial fog
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 25;
+
+        // Particle System Properties
+        const particleCount = 6000;
+
+        // Geometry to hold the current animating positions
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+        const sizes = new Float32Array(particleCount);
+
+        // Pre-calculate target shapes
+        const shapeHelix = new Float32Array(particleCount * 3);
+        const shapeSphere = new Float32Array(particleCount * 3);
+        const shapeHeart = new Float32Array(particleCount * 3);
+        const shapeTorus = new Float32Array(particleCount * 3);
+        const shapeDiamond = new Float32Array(particleCount * 3);
+        const shapeNetwork = new Float32Array(particleCount * 3);
+
+        // Hover morph targets
+        const shapeSphereHover = new Float32Array(particleCount * 3);
+        const shapeHeartHover = new Float32Array(particleCount * 3);
+        const shapeTorusHover = new Float32Array(particleCount * 3);
+
+        // Helper shapes
+        function initShapes() {
+            // Helper for 3D Grid dimensions
+            const gridSize = Math.ceil(Math.pow(particleCount, 1 / 3));
+
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+
+                // 1. HELIX
+                const tH = (i / particleCount) * Math.PI * 40;
+                const rH = 4;
+                const yH = ((i / particleCount) - 0.5) * 120;
+                const strandPhase = (i % 2 === 0) ? 0 : Math.PI;
+                const scatter = 0.5;
+                shapeHelix[i3] = Math.cos(tH + strandPhase) * rH + (Math.random() - 0.5) * scatter;
+                shapeHelix[i3 + 1] = yH + (Math.random() - 0.5) * scatter;
+                shapeHelix[i3 + 2] = Math.sin(tH + strandPhase) * rH + (Math.random() - 0.5) * scatter;
+
+                // 2. SPHERE (Slightly smaller)
+                const phi = Math.acos(-1 + (2 * i) / particleCount);
+                const theta = Math.sqrt(particleCount * Math.PI) * phi;
+                const rS = 6.0 + (Math.random() * 1.5);
+                shapeSphere[i3] = rS * Math.cos(theta) * Math.sin(phi);
+                shapeSphere[i3 + 1] = rS * Math.sin(theta) * Math.sin(phi);
+                shapeSphere[i3 + 2] = rS * Math.cos(phi);
+
+                // 2a. SPHERE HOVER (3D Data Grid Matrix)
+                const gridSpacing = 1.0;
+                const gx = (i % gridSize) - gridSize / 2.0;
+                const gy = (Math.floor(i / gridSize) % gridSize) - gridSize / 2.0;
+                const gz = (Math.floor(i / (gridSize * gridSize))) - gridSize / 2.0;
+                shapeSphereHover[i3] = gx * gridSpacing;
+                shapeSphereHover[i3 + 1] = gy * gridSpacing;
+                shapeSphereHover[i3 + 2] = gz * gridSpacing;
+
+                // 3. HEART (Taubin's)
+                let hx, hy, hz;
+                while (true) {
+                    tx = (Math.random() - 0.5) * 2.5;
+                    ty = (Math.random() - 0.5) * 2.5;
+                    tz = (Math.random() - 0.5) * 2.5;
+                    const val = Math.pow(tx * tx + 2.25 * ty * ty + tz * tz - 1, 3) - (tx * tx * tz * tz * tz) - (0.1125 * ty * ty * tz * tz * tz);
+
+                    if (val <= 0 && val >= -0.8) {
+                        hx = tx; hy = ty; hz = tz;
+                        break;
+                    }
+                }
+                const sH = 6.5;
+                shapeHeart[i3] = hx * sH;
+                shapeHeart[i3 + 1] = hz * sH + 2;
+                shapeHeart[i3 + 2] = hy * sH;
+
+                // 3a. HEART HOVER (Layered Ventricular Expansion)
+                const layer = (i % 3) + 1; // 1, 2, or 3 concentric layers
+                const expandS = sH * (1.0 + (layer * 0.35));
+                shapeHeartHover[i3] = hx * expandS;
+                shapeHeartHover[i3 + 1] = hz * expandS + 2;
+                shapeHeartHover[i3 + 2] = hy * expandS;
+
+                // 4. TORUS (Infinity loop)
+                const uT = Math.random() * Math.PI * 2;
+                const vT = Math.random() * Math.PI * 2;
+                const R = 6;
+                const rr = 2;
+                shapeTorus[i3] = (R + rr * Math.cos(vT)) * Math.cos(uT);
+                shapeTorus[i3 + 1] = rr * Math.sin(vT) + Math.sin(uT * 2) * 3;
+                shapeTorus[i3 + 2] = (R + rr * Math.cos(vT)) * Math.sin(uT);
+
+                // 4a. TORUS HOVER (Molecular Ribbons/Unspooling)
+                const uTH = Math.random() * Math.PI * 2;
+                const vTH = (i / particleCount) * Math.PI * 80; // extreme twist
+                const RH = 8;
+                const rrH = 1.5 + Math.random();
+                shapeTorusHover[i3] = (RH + rrH * Math.cos(vTH)) * Math.cos(uTH);
+                shapeTorusHover[i3 + 1] = rrH * Math.sin(vTH) + ((i / particleCount) - 0.5) * 18 - 2;
+                shapeTorusHover[i3 + 2] = (RH + rrH * Math.cos(vTH)) * Math.sin(uTH);
+
+                // 5. PLASMID RING (Crack Genetic Code) replacing the Diamond
+                const uP = (i / particleCount) * Math.PI * 2; // circle
+                const twists = 14;
+                const RP = 7.0; // main radius
+                const rP = 1.8; // tube radius
+                const strandPhaseP = (i % 2 === 0) ? 0 : Math.PI; // double stranded
+
+                let px = (RP + rP * Math.cos(uP * twists + strandPhaseP)) * Math.cos(uP);
+                let py = rP * Math.sin(uP * twists + strandPhaseP);
+                let pz = (RP + rP * Math.cos(uP * twists + strandPhaseP)) * Math.sin(uP);
+
+                // Tilt it slightly
+                shapeDiamond[i3] = px;
+                shapeDiamond[i3 + 1] = py * Math.cos(0.5) - pz * Math.sin(0.5);
+                shapeDiamond[i3 + 2] = py * Math.sin(0.5) + pz * Math.cos(0.5);
+
+                // 6. NETWORK (Constellation of Professionals - smaller size)
+                const nphi = Math.acos(-1 + (2 * i) / particleCount);
+                const ntheta = Math.sqrt(particleCount * Math.PI) * nphi;
+                const rN = 7.5; // reduced from 12
+                const clusterPhi = Math.round(nphi * 3) / 3;
+                const clusterTheta = Math.round(ntheta * 3) / 3;
+                const lerpAmt = 0.85;
+                const finalPhi = nphi * (1 - lerpAmt) + clusterPhi * lerpAmt;
+                const finalTheta = ntheta * (1 - lerpAmt) + clusterTheta * lerpAmt;
+                shapeNetwork[i3] = rN * Math.cos(finalTheta) * Math.sin(finalPhi);
+                shapeNetwork[i3 + 1] = rN * Math.sin(finalTheta) * Math.sin(finalPhi);
+                shapeNetwork[i3 + 2] = rN * Math.cos(finalPhi);
+
+                // Init current positions to helix
+                positions[i3] = shapeHelix[i3];
+                positions[i3 + 1] = shapeHelix[i3 + 1];
+                positions[i3 + 2] = shapeHelix[i3 + 2];
+
+                sizes[i] = Math.random() * 2.0 + 0.5;
+            }
+        }
+
+        initShapes();
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        // Custom Shader Material for glowing particles
+        const material = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 }
+            },
+            vertexShader: `
+                attribute vec3 color;
+                varying vec3 vColor;
+                void main() {
+                    vColor = color;
+                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                    // Size attenuation so distant particles are smaller
+                    gl_PointSize = 12.0 * (10.0 / -mvPosition.z);
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
+            fragmentShader: `
+                varying vec3 vColor;
+                void main() {
+                    float dist = length(gl_PointCoord - vec2(0.5));
+                    if (dist > 0.5) discard;
+                    float alpha = (0.5 - dist) * 2.0;
+                    gl_FragColor = vec4(vColor, alpha * 0.8);
+                }
+            `,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.NormalBlending
+        });
+
+        const particleSystem = new THREE.Points(geometry, material);
+        scene.add(particleSystem);
+
+        // System OS Light/Dark Mode Automation & Manual Toggle
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        function updateTheme(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                themeToggleLightIcon.classList.remove('hidden');
+                themeToggleDarkIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeToggleLightIcon.classList.add('hidden');
+                themeToggleDarkIcon.classList.remove('hidden');
+            }
+
+            // Sync Fog
+            scene.fog.color.setHex(isDark ? 0x030712 : 0xf8fafc);
+
+            // Sync Particle Properties
+            material.blending = isDark ? THREE.AdditiveBlending : THREE.NormalBlending;
+
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                const colorMix = i / particleCount;
+
+                let c1, c2;
+                if (isDark) {
+                    c1 = new THREE.Color(0x38bdf8); // Sky blue
+                    c2 = new THREE.Color(0x818cf8); // Indigo/Purple
+                } else {
+                    c1 = new THREE.Color(0x0284c7); // Deep sky blue
+                    c2 = new THREE.Color(0x4f46e5); // Indigo
+                }
+
+                const finalColor = c1.lerp(c2, colorMix);
+                colors[i3] = finalColor.r;
+                colors[i3 + 1] = finalColor.g;
+                colors[i3 + 2] = finalColor.b;
+            }
+            particleSystem.geometry.attributes.color.needsUpdate = true;
+        }
+
+        // Initialize OS specific theme colors
+        let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        updateTheme(isDarkMode);
+
+        themeToggleBtn.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            updateTheme(isDarkMode);
+        });
+
+        // Mobile Menu Script
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+
+        // Target state tracking
+        let currentShape = 'helix';
+        let targetShapeArray = shapeHelix;
+
+        // Dynamically track mobile state for 3D positioning
+        let isMobile = window.innerWidth < 768;
+        let targetOffsetX = 0;
+
+        // Raycasting Hover Interaction setup
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2(-9999, -9999); // start offscreen
+
+        // Invisible hit box that follows the shape offset
+        const hitGeo = new THREE.SphereGeometry(7, 16, 16);
+        const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+        const hitMesh = new THREE.Mesh(hitGeo, hitMat);
+        scene.add(hitMesh);
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Touch support for mobile "hover" interaction
+        window.addEventListener('touchmove', (event) => {
+            if (event.touches.length > 0) {
+                mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+            }
+        });
+        window.addEventListener('touchend', () => {
+            mouse.x = -9999;
+            mouse.y = -9999;
+        });
+
+        // Scroll interaction and Header Minification
+        const mainHeader = document.getElementById('main-header');
+        const headerContainer = document.getElementById('header-container');
+
+        window.addEventListener('scroll', () => {
+            // Header resize
+            if (window.scrollY > 50) {
+                headerContainer.classList.remove('h-20');
+                headerContainer.classList.add('h-14');
+            } else {
+                headerContainer.classList.add('h-20');
+                headerContainer.classList.remove('h-14');
+            }
+        });
+
+        const sections = document.querySelectorAll('.content-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const activeShape = entry.target.getAttribute('data-shape');
+
+                    // 1. Immediately fade in the HTML card Content
+                    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('is-active'));
+                    entry.target.classList.add('is-active');
+
+                    // 2. Swarm shift with scroll (no artificial delay)
+                    currentShape = activeShape;
+
+                    if (activeShape === 'helix') targetShapeArray = shapeHelix;
+                    else if (activeShape === 'sphere') targetShapeArray = shapeSphere;
+                    else if (activeShape === 'diamond') targetShapeArray = shapeDiamond;
+                    else if (activeShape === 'torus') targetShapeArray = shapeTorus;
+                    else if (activeShape === 'network') targetShapeArray = shapeNetwork;
+
+                    // Determine side alignment (if left aligned content, put shape on right (+9))
+                    if (!isMobile && activeShape !== 'helix') {
+                        if (entry.target.classList.contains('align-left')) targetOffsetX = 10;
+                        else if (entry.target.classList.contains('align-right')) targetOffsetX = -10;
+                        else targetOffsetX = 0;
+                    } else {
+                        targetOffsetX = 0;
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sections.forEach(s => observer.observe(s));
+
+        window.addEventListener('resize', () => {
+            isMobile = window.innerWidth < 768; // Update mobile state
+
+            // Re-evaluate offset on resize immediately
+            if (!isMobile && currentShape !== 'helix') {
+                const activeSec = document.querySelector('.content-section.is-active');
+                if (activeSec) {
+                    if (activeSec.classList.contains('align-left')) targetOffsetX = 10;
+                    else if (activeSec.classList.contains('align-right')) targetOffsetX = -10;
+                    else targetOffsetX = 0;
+                }
+            } else {
+                targetOffsetX = 0;
+            }
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const clock = new THREE.Clock();
+
+        let prevTime = 0;
+        let globalRotTheta = 0;
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = clock.getElapsedTime();
+            if (prevTime === 0) prevTime = time;
+            const delta = time - prevTime;
+            prevTime = time;
+
+            const scrollY = window.scrollY;
+            const positions = particleSystem.geometry.attributes.position.array;
+
+            const isHelix = currentShape === 'helix';
+            let isHovered = false;
+            let currentHitPoint = null;
+
+            // Hover Check Math
+            if (!isHelix) {
+                hitMesh.position.x = targetOffsetX;
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObject(hitMesh);
+                isHovered = (intersects.length > 0);
+                if (isHovered) currentHitPoint = intersects[0].point;
+            }
+
+            // Target params - restore responsive speed for scroll
+            let targetParams = { speed: 0.08, rotSpeed: 0.005 };
+
+            if (isHovered && !isHelix) {
+                document.body.style.cursor = 'crosshair';
+                targetParams.rotSpeed = 0.002; // Slow down rotation to let them inspect
+            } else {
+                document.body.style.cursor = 'default';
+            }
+
+            // Accumulate rotation smoothly over delta time (prevents shape flipping abruptly)
+            globalRotTheta += delta * targetParams.rotSpeed * 60;
+
+            // Interpolate Particle Positions
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                let tx, ty, tz;
+
+                if (isHelix) {
+                    tx = shapeHelix[i3];
+                    let localY = shapeHelix[i3 + 1] + (scrollY * 0.05);
+                    localY = ((localY + 60) % 120) - 60; // infinite vertical wrapping
+                    ty = localY;
+                    tz = shapeHelix[i3 + 2];
+                } else {
+                    // Get base local positions
+                    let localX = targetShapeArray[i3];
+                    let localY = targetShapeArray[i3 + 1];
+                    let localZ = targetShapeArray[i3 + 2];
+
+                    // 1. Hovering slight sine wave offsets per particle logic
+                    const hoverLevitate = Math.sin(time * 2.0 + i) * 0.2;
+                    localY += hoverLevitate;
+
+                    // 2. Local Axis Rotation (so shapes spin in place)
+                    // We use the accumulated globalRotTheta instead of raw time so sudden rate changes don't snap the geometry
+                    const theta = globalRotTheta;
+                    const cosT = Math.cos(theta);
+                    const sinT = Math.sin(theta);
+
+                    const rotatedX = localX * cosT - localZ * sinT;
+                    const rotatedZ = localX * sinT + localZ * cosT;
+
+                    // 3. Apply the fixed screen alignment offset AFTER rotation
+                    tx = rotatedX + targetOffsetX;
+                    ty = localY;
+                    tz = rotatedZ;
+
+                    // 4. Localized Particle Reflection (Push away from cursor hit point)
+                    if (isHovered && currentHitPoint) {
+                        const dx = tx - currentHitPoint.x;
+                        const dy = ty - currentHitPoint.y;
+                        const dz = tz - currentHitPoint.z;
+                        let dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                        // Push radius
+                        const repelRadius = 4.5;
+                        if (dist < repelRadius && dist > 0.1) {
+                            // Exponential force, stronger at center
+                            const force = Math.pow((repelRadius - dist) / repelRadius, 2);
+                            const pushAmt = 2.5;
+
+                            // Emphasize the Y axis to push to "north and south poles"
+                            tx += (dx / dist) * force * pushAmt * 0.5;
+                            ty += (dy / dist) * force * pushAmt * 2.5; // Strong Y reflection
+                            tz += (dz / dist) * force * pushAmt * 0.5;
+                        }
+                    }
+                }
+
+                // Smooth morph
+                const currentSpeed = isHelix ? 0.3 : targetParams.speed;
+
+                positions[i3] += (tx - positions[i3]) * currentSpeed;
+                positions[i3 + 1] += (ty - positions[i3 + 1]) * currentSpeed;
+                positions[i3 + 2] += (tz - positions[i3 + 2]) * currentSpeed;
+            }
+
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+
+            // Overall global rotation
+            if (isHelix) {
+                // Helix naturally recenters
+                particleSystem.rotation.y += (0 - particleSystem.rotation.y) * 0.05;
+                particleSystem.rotation.z += (0 - particleSystem.rotation.z) * 0.05;
+            } else {
+                // Global natural sway (but NO global Y rotation anymore so they don't orbit)
+                particleSystem.rotation.y = 0;
+                particleSystem.rotation.z = Math.sin(time * 0.5) * 0.05;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+    </script>
+</body>
+
+</html>
