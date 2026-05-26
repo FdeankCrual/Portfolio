@@ -271,13 +271,14 @@ export default function ActiveLearningProject() {
                   <AnimatePresence>
                     {hoveredDay === i && day.count > 0 && (
                       <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        initial={{ opacity: 0, y: i === matrix.length - 1 ? 10 : -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        exit={{ opacity: 0, y: i === matrix.length - 1 ? 10 : -10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
                         style={{
                           position: 'absolute',
-                          top: 'calc(100% + 12px)',
+                          top: i === matrix.length - 1 ? 'auto' : 'calc(100% + 12px)',
+                          bottom: i === matrix.length - 1 ? 'calc(100% + 12px)' : 'auto',
                           left: '50%',
                           transform: 'translateX(-50%)',
                           width: '100%',
@@ -303,12 +304,16 @@ export default function ActiveLearningProject() {
                           ))}
                         </div>
                         
-                        {/* Tooltip Arrow (pointing UP towards the block) */}
+                        {/* Tooltip Arrow (pointing UP or DOWN depending on position) */}
                         <div style={{
-                          position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)',
+                          position: 'absolute', 
+                          top: i === matrix.length - 1 ? '100%' : 'auto',
+                          bottom: i === matrix.length - 1 ? 'auto' : '100%',
+                          left: '50%', transform: 'translateX(-50%)',
                           width: 0, height: 0,
                           borderLeft: '8px solid transparent', borderRight: '8px solid transparent',
-                          borderBottom: `8px solid ${colors[day.level > 0 ? day.level : 1]}`
+                          borderTop: i === matrix.length - 1 ? `8px solid ${colors[day.level > 0 ? day.level : 1]}` : 'none',
+                          borderBottom: i === matrix.length - 1 ? 'none' : `8px solid ${colors[day.level > 0 ? day.level : 1]}`
                         }} />
                       </motion.div>
                     )}
