@@ -1,100 +1,171 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ActiveLearningProject() {
-  const [commits, setCommits] = useState([]);
-  const [matrix, setMatrix] = useState([]);
+  const [allCommits, setAllCommits] = useState([]);
+  const [reposList, setReposList] = useState([]);
+  const [selectedRepo, setSelectedRepo] = useState('ALL');
   const [loading, setLoading] = useState(true);
   const [hoveredDay, setHoveredDay] = useState(null);
 
   useEffect(() => {
-    // Fetch up to 100 recent commits from the repo to guarantee we have data for the last 14 days
-    fetch('https://api.github.com/repos/FdeankCrual/Learning_stay_tuned/commits?per_page=100')
+    // 1. Fetch all public repositories for the user
+    fetch('https://api.github.com/users/FdeankCrual/repos?per_page=100&type=owner')
       .then(res => res.json())
-      .then(data => {
-        if (!Array.isArray(data)) {
+      .then(async (repos) => {
+        if (!Array.isArray(repos)) {
           setLoading(false);
           return;
         }
         
-        // Save the first 5 commits for the terminal log on the right
-        setCommits(data.slice(0, 5));
+        const repoNames = repos.map(r => r.name);
+        setReposList(repoNames);
 
-        // Group all fetched commits by their exact date
-        const commitsByDate = {};
-        data.forEach(commit => {
-          const dateString = new Date(commit.commit.author.date).toISOString().split('T')[0];
-          if (!commitsByDate[dateString]) commitsByDate[dateString] = [];
-          commitsByDate[dateString].push(commit);
+        // 2. Fetch up to 100 recent commits for EVERY repository
+        const commitPromises = repoNames.map(repoName => 
+          fetch(`https://api.github.com/repos/FdeankCrual/${repoName}/commits?per_page=100`)
+            .then(res => {
+              if (res.ok) return res.json();
+              return [];
+            })
+            .then(data => {
+              if (!Array.isArray(data)) return [];
+              // Tag each commit with its source repository
+              return data.map(commit => ({ ...commit, repoName }));
+            })
+            .catch(() => [])
+        );
+
+        const results = await Promise.all(commitPromises);
+        
+        // 3. Flatten into a single master global timeline and sort by date descending
+        const mergedCommits = results.flat().sort((a, b) => {
+          return new Date(b.commit.author.date) - new Date(a.commit.author.date);
         });
 
-        // Get the unique active dates, sorted newest first
-        const sortedActiveDates = Object.keys(commitsByDate).sort((a, b) => b.localeCompare(a));
-        
-        // Grab exactly the last 7 days that actually had commits
-        const last7ActiveDays = sortedActiveDates.slice(0, 7).map(dateString => {
-          const dayCommits = commitsByDate[dateString];
-          const count = dayCommits.length;
-          
-          let level = 0;
-          if (count === 1) level = 1;
-          if (count === 2) level = 2;
-          if (count === 3) level = 3;
-          if (count >= 4) level = 4;
-
-          const messages = dayCommits.map(c => c.commit.message.split('\n')[0]);
-          
-          // To ensure safe timezone parsing for display, we split and reconstruct
-          const [year, month, day] = dateString.split('-');
-          const d = new Date(year, month - 1, day);
-
-          return {
-            date: dateString,
-            displayDate: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            count,
-            level,
-            messages
-          };
-        });
-        
-        setMatrix(last7ActiveDays);
+        setAllCommits(mergedCommits);
         setLoading(false);
       })
       .catch(err => {
-        console.error('Failed to fetch commits', err);
+        console.error('Failed to fetch repositories or commits', err);
         setLoading(false);
       });
   }, []);
+
+  // 4. Derive the matrix and terminal data dynamically based on the dropdown filter
+  const { matrix, terminalCommits } = useMemo(() => {
+    const filteredCommits = selectedRepo === 'ALL' 
+      ? allCommits 
+      : allCommits.filter(c => c.repoName === selectedRepo);
+
+    // Save the first 5 commits for the terminal log on the right
+    const terminal = filteredCommits.slice(0, 5);
+
+    // Group the filtered commits by their exact date
+    const commitsByDate = {};
+    filteredCommits.forEach(commit => {
+      const dateString = new Date(commit.commit.author.date).toISOString().split('T')[0];
+      if (!commitsByDate[dateString]) commitsByDate[dateString] = [];
+      commitsByDate[dateString].push(commit);
+    });
+
+    // Get the unique active dates, sorted newest first
+    const sortedActiveDates = Object.keys(commitsByDate).sort((a, b) => b.localeCompare(a));
+    
+    // Grab exactly the last 7 days that actually had commits
+    const activeMatrix = sortedActiveDates.slice(0, 7).map(dateString => {
+      const dayCommits = commitsByDate[dateString];
+      const count = dayCommits.length;
+      
+      let level = 0;
+      if (count === 1) level = 1;
+      if (count === 2) level = 2;
+      if (count === 3) level = 3;
+      if (count >= 4) level = 4;
+
+      // Extract messages and tag them with their repo name if 'ALL' is selected
+      const messages = dayCommits.map(c => ({
+        text: c.commit.message.split('\n')[0],
+        repo: c.repoName
+      }));
+      
+      const [year, month, day] = dateString.split('-');
+      const d = new Date(year, month - 1, day);
+
+      return {
+        date: dateString,
+        displayDate: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        count,
+        level,
+        messages
+      };
+    });
+
+    return { matrix: activeMatrix, terminalCommits: terminal };
+  }, [allCommits, selectedRepo]);
+
 
   // Glowing aesthetic colors mapped to intensity levels
   const colors = ['rgba(255,255,255,0.03)', '#0e4429', '#006d32', '#26a641', '#39d353'];
 
   return (
-    <section className="section" style={{ minHeight: '100vh', backgroundColor: '#0d0d0d', zIndex: 4, position: 'relative', padding: '10vh 5vw', display: 'flex', flexDirection: 'column' }}>
+    <section className="section" style={{ minHeight: '100vh', backgroundColor: '#0d0d0d', zIndex: 4, position: 'relative', padding: '5vh 5vw', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       
       {/* Header */}
-      <div style={{ marginBottom: '4rem', textAlign: 'left' }}>
-        <h2 className="text-large" style={{ color: 'var(--text-color)', marginBottom: '1rem' }}>04. ACTIVE DEVELOPMENT</h2>
-        <h3 style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', fontWeight: 800, color: '#f6f4f0', lineHeight: 1.1, letterSpacing: '-0.02em' }}>
-          CONSISTENCY IS <span style={{ color: '#4ade80' }}>EVERYTHING</span>
-        </h3>
-        <p style={{ color: 'rgba(246,244,240,0.6)', marginTop: '1rem', fontSize: '1.2rem', maxWidth: '800px' }}>
-          My central hub for daily learning, algorithms, and projects. Hover over the 3D blocks below to view my exact, real-time commit messages from the last 7 active days.
-        </p>
+      <div style={{ marginBottom: '2rem', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1rem' }}>
+        <div>
+          <h2 className="text-large" style={{ color: 'var(--text-color)', marginBottom: '0.5rem' }}>04. ACTIVE DEVELOPMENT</h2>
+          <h3 style={{ fontSize: 'clamp(1.5rem, 4vw, 3rem)', fontWeight: 800, color: '#f6f4f0', lineHeight: 1.1, letterSpacing: '-0.02em' }}>
+            CONSISTENCY IS <span style={{ color: '#4ade80' }}>EVERYTHING</span>
+          </h3>
+          <p style={{ color: 'rgba(246,244,240,0.6)', marginTop: '0.5rem', fontSize: '1rem', maxWidth: '800px' }}>
+            My central hub for daily learning, algorithms, and projects. Hover over the 3D blocks below to view my exact, real-time commit messages from the last 7 active days.
+          </p>
+        </div>
+        
+        {/* Dropdown Filter */}
+        <div style={{ position: 'relative', zIndex: 60 }}>
+          <label style={{ display: 'block', fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem' }}>Track Repository:</label>
+          <select 
+            value={selectedRepo}
+            onChange={(e) => setSelectedRepo(e.target.value)}
+            style={{
+              appearance: 'none',
+              backgroundColor: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              color: '#4ade80',
+              padding: '0.75rem 3rem 0.75rem 1.5rem',
+              borderRadius: '8px',
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              fontFamily: 'monospace',
+              cursor: 'pointer',
+              outline: 'none',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
+            }}
+          >
+            <option value="ALL" style={{ background: '#1a1a1a', color: '#fff' }}>[ ALL REPOSITORIES ]</option>
+            {reposList.map(repo => (
+              <option key={repo} value={repo} style={{ background: '#1a1a1a', color: '#fff' }}>{repo}</option>
+            ))}
+          </select>
+          {/* Custom Arrow */}
+          <div style={{ position: 'absolute', right: '1.5rem', bottom: '1rem', pointerEvents: 'none', color: '#4ade80' }}>▼</div>
+        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '4rem', alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem', alignItems: 'start' }}>
         
         {/* Left Side: Massive 14-Day 3D Matrix */}
         <div style={{ 
           background: 'rgba(255,255,255,0.02)', 
           border: '1px solid rgba(255,255,255,0.05)', 
           borderRadius: '24px', 
-          padding: '3rem',
+          padding: '2rem',
           boxShadow: '0 20px 80px rgba(0,0,0,0.5)',
           display: 'flex', flexDirection: 'column', height: '100%'
         }}>
-          <h4 style={{ fontSize: '1rem', color: '#f6f4f0', marginBottom: '2rem', letterSpacing: '1px', textTransform: 'uppercase', display: 'flex', justifyContent: 'space-between' }}>
+          <h4 style={{ fontSize: '0.9rem', color: '#f6f4f0', marginBottom: '1.5rem', letterSpacing: '1px', textTransform: 'uppercase', display: 'flex', justifyContent: 'space-between' }}>
             <span>Last 7 Commit Days</span>
             <span style={{ color: '#4ade80', animation: 'pulse 2s infinite' }}>● REAL-TIME</span>
           </h4>
@@ -104,10 +175,10 @@ export default function ActiveLearningProject() {
             position: 'relative',
             display: 'flex', 
             flexDirection: 'column', 
-            gap: '2rem', 
+            gap: '1.25rem', 
             width: '100%', 
             background: 'rgba(0,0,0,0.2)',
-            padding: '3rem 2rem',
+            padding: '2rem 1.5rem',
             borderRadius: '16px',
             border: '1px solid rgba(255,255,255,0.03)',
             perspective: '1000px'
@@ -115,8 +186,8 @@ export default function ActiveLearningProject() {
             {/* The Main Vertical Branch Line */}
             <div style={{
               position: 'absolute',
-              top: '3rem', bottom: '3rem',
-              left: '3rem',
+              top: '2rem', bottom: '2rem',
+              left: '2rem',
               width: '4px',
               backgroundColor: 'rgba(255,255,255,0.1)',
               borderRadius: '2px',
@@ -125,7 +196,7 @@ export default function ActiveLearningProject() {
 
             {loading ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', height: '100%' }}>
-                Fetching live commits from GitHub...
+                Fetching live commits across GitHub...
               </div>
             ) : matrix.map((day, i) => (
               <div 
@@ -155,19 +226,19 @@ export default function ActiveLearningProject() {
                 {/* Horizontal Connection Line */}
                 <motion.div
                   initial={{ width: 0 }}
-                  whileInView={{ width: '2rem' }}
+                  whileInView={{ width: '1.5rem' }}
                   transition={{ delay: (i * 0.05) + 0.2 }}
                   style={{
                     height: '2px',
                     backgroundColor: day.level > 0 ? colors[day.level] : 'rgba(255,255,255,0.1)',
-                    marginLeft: '1rem',
-                    marginRight: '1rem',
+                    marginLeft: '0.75rem',
+                    marginRight: '0.75rem',
                     zIndex: 1
                   }}
                 />
 
                 {/* The 3D Block Container */}
-                <div style={{ position: 'relative', flex: 1, height: '60px' }}>
+                <div style={{ position: 'relative', flex: 1, height: '45px' }}>
                   <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -181,16 +252,16 @@ export default function ActiveLearningProject() {
                       boxShadow: day.level > 0 
                         ? `0 10px 20px rgba(0,0,0,0.5), 0 0 15px ${colors[day.level]}60, inset 0 2px 5px rgba(255,255,255,0.3)` 
                         : '0 5px 15px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.05)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1.5rem',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1.25rem',
                       cursor: 'pointer',
                       transformStyle: 'preserve-3d'
                     }}
                   >
-                    <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', fontFamily: 'monospace' }}>
+                    <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', fontFamily: 'monospace' }}>
                       {day.displayDate}
                     </span>
                     {day.count > 0 && (
-                      <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'rgba(255,255,255,0.9)', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                      <span style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'rgba(255,255,255,0.9)', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
                         {day.count} {day.count === 1 ? 'Commit' : 'Commits'}
                       </span>
                     )}
@@ -221,9 +292,13 @@ export default function ActiveLearningProject() {
                         }}
                       >
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                          {day.messages.map((msg, idx) => (
+                          {day.messages.map((msgObj, idx) => (
                             <div key={idx} style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.8rem', lineHeight: 1.4, wordBreak: 'break-word' }}>
-                              <span style={{ color: '#4ade80', marginRight: '8px' }}>&gt;</span>{msg}
+                              <span style={{ color: '#4ade80', marginRight: '8px' }}>&gt;</span>
+                              {selectedRepo === 'ALL' && (
+                                <span style={{ color: '#38bdf8', marginRight: '5px' }}>[{msgObj.repo}]</span>
+                              )}
+                              {msgObj.text}
                             </div>
                           ))}
                         </div>
@@ -245,41 +320,43 @@ export default function ActiveLearningProject() {
         </div>
 
         {/* Right Side: GitHub Integration */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           
           {/* Project Status Panel */}
           <div style={{ 
             background: '#1a1a1a', 
-            border: '1px solid #c6a87c33', 
+            border: '1px solid rgba(198, 168, 124, 0.2)', 
             borderRadius: '20px', 
-            padding: '2rem',
+            padding: '1.5rem',
             position: 'relative'
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h4 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#f6f4f0' }}>Repository Status</h4>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f6f4f0' }}>Repository Status</h4>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span style={{ width: '8px', height: '8px', backgroundColor: '#4ade80', borderRadius: '50%', boxShadow: '0 0 10px #4ade80' }}></span>
-                <span style={{ fontSize: '0.8rem', fontFamily: 'monospace', color: '#4ade80' }}>LIVE API</span>
+                <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: '#4ade80' }}>LIVE API</span>
               </div>
             </div>
             
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '1rem' }}>
               <div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(246,244,240,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>Primary Focus</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#c6a87c' }}>Python / AI / Scripts</div>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(246,244,240,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>Scope</div>
+                <div style={{ fontSize: '1rem', fontWeight: 600, color: '#c6a87c' }}>
+                  {selectedRepo === 'ALL' ? 'Global Tracker' : 'Isolated Project'}
+                </div>
               </div>
               <div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(246,244,240,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>Branch</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#f6f4f0' }}>main</div>
-              </div>
-              <div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(246,244,240,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>Repo</div>
-                <a href="https://github.com/FdeankCrual/Learning_stay_tuned" target="_blank" rel="noreferrer" style={{ fontSize: '1.1rem', fontWeight: 600, color: '#38bdf8', textDecoration: 'none' }}>FdeankCrual/Learning_stay_tuned ↗</a>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(246,244,240,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>Current Repo</div>
+                <a href={selectedRepo === 'ALL' ? 'https://github.com/FdeankCrual' : `https://github.com/FdeankCrual/${selectedRepo}`} target="_blank" rel="noreferrer" style={{ fontSize: '1rem', fontWeight: 600, color: '#38bdf8', textDecoration: 'none' }}>
+                  {selectedRepo === 'ALL' ? 'FdeankCrual / * ↗' : `FdeankCrual/${selectedRepo} ↗`}
+                </a>
               </div>
             </div>
 
-            <p style={{ fontSize: '0.9rem', color: 'rgba(246,244,240,0.7)', lineHeight: 1.6 }}>
-              This section streams directly from my master learning repository. The massive 14-day grid visualizes my recent commitment, storing every real-time commit message directly inside the 3D blocks.
+            <p style={{ fontSize: '0.85rem', color: 'rgba(246,244,240,0.7)', lineHeight: 1.5, margin: 0 }}>
+              {selectedRepo === 'ALL' 
+                ? "This section is actively streaming and merging commits across ALL of my public repositories into a master global timeline." 
+                : `This section is currently tracking active commits exclusively from the ${selectedRepo} repository.`}
             </p>
           </div>
 
@@ -288,29 +365,33 @@ export default function ActiveLearningProject() {
             background: 'rgba(0,0,0,0.4)', 
             border: '1px solid rgba(246,244,240,0.08)', 
             borderRadius: '20px', 
-            padding: '2rem',
+            padding: '1.5rem',
             fontFamily: 'monospace'
           }}>
-            <h4 style={{ fontSize: '0.9rem', color: 'rgba(246,244,240,0.5)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1.5rem' }}>
-              <span style={{ color: '#38bdf8' }}>$</span> git log --live
+            <h4 style={{ fontSize: '0.85rem', color: 'rgba(246,244,240,0.5)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between' }}>
+              <span><span style={{ color: '#38bdf8' }}>$</span> git log --live</span>
+              {selectedRepo !== 'ALL' && <span style={{ color: '#4ade80' }}>[{selectedRepo}]</span>}
             </h4>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {loading ? (
                 <div style={{ color: 'rgba(246,244,240,0.4)', fontSize: '0.85rem' }}>Fetching commits from GitHub...</div>
-              ) : commits.map((commitData, idx) => (
+              ) : terminalCommits.slice(0, 4).map((commitData, idx) => (
                 <motion.div 
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.1 }}
                   key={commitData.sha} 
-                  style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid rgba(246,244,240,0.05)', paddingBottom: '1rem' }}
+                  style={{ display: 'flex', gap: '1rem', borderBottom: idx === 3 ? 'none' : '1px solid rgba(246,244,240,0.05)', paddingBottom: idx === 3 ? '0' : '0.75rem' }}
                 >
                   <div style={{ color: '#38bdf8', fontSize: '0.85rem' }}>
                     {commitData.sha.substring(0, 7)}
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ color: '#f6f4f0', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
+                      {selectedRepo === 'ALL' && (
+                        <span style={{ color: '#c6a87c', marginRight: '5px' }}>[{commitData.repoName}]</span>
+                      )}
                       {commitData.commit.message.split('\n')[0]}
                     </div>
                     <div style={{ color: 'rgba(246,244,240,0.4)', fontSize: '0.75rem' }}>

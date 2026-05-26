@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionTemplate, useSpring } from 'framer-motion';
 import ActiveLearningProject from './ActiveLearningProject';
 
 const revealVariants = {
@@ -324,9 +324,16 @@ function ExperienceSection() {
     offset: ["start start", "end end"]
   });
 
-  // Smooth upward scroll that comes up fast, drifts slowly (holds) through the center, then accelerates up
-  const y = useTransform(scrollYProgress, [0, 0.25, 0.75, 1], ['100vh', '10vh', '-10vh', '-100vh']);
-  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+  // Apply a spring physics layer to make the scroll feel incredibly smooth and eliminate lag
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  // Smoother, more continuous mapping so it doesn't feel 'stuck' in the middle
+  const y = useTransform(smoothProgress, [0, 0.3, 0.7, 1], ['100vh', '25vh', '-25vh', '-100vh']);
+  const opacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
     <section ref={targetRef} style={{ position: 'relative', height: '400vh', zIndex: 4, backgroundColor: 'var(--bg-color)' }}>
