@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welocity Genetics | Contact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            overflow-x: hidden;
+            margin: 0;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        .dark body {
+            background-color: #030712;
+            color: #f8fafc;
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15vh 5%;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        @media (min-width: 1024px) {
+            .grid-container {
+                grid-template-columns: 1fr 1.2fr;
+                gap: 2rem;
+                align-items: flex-start;
+            }
+        }
+
+        /* Clean inputs with visible backgrounds */
+        .ghost-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            border-radius: 0.75rem;
+            color: inherit;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-weight: 400;
+        }
+
+        .ghost-input:focus {
+            border-color: #f472b6;
+            /* pink glow */
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .dark .ghost-input {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(148, 163, 184, 0.3);
+        }
+
+        .dark .ghost-input:focus {
+            border-color: #38bdf8;
+            /* sky glow */
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+            background: rgba(30, 41, 59, 0.95);
+        }
+
+        .ghost-input::placeholder {
+            color: rgba(100, 116, 139, 0.8);
+            font-weight: 300;
+        }
+
+        .glow-text {
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .submit-btn {
+            background: transparent;
+            border: 2px solid #38bdf8;
+            color: #030712;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .dark .submit-btn {
+            color: #f8fafc;
+            border-color: #38bdf8;
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            background: #38bdf8;
+            color: #fff;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: emerge 1s ease forwards;
+        }
+
+        @keyframes emerge {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stronger backdrop to improve text visibility against the particles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 3rem;
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Navigation Header -->
+    <!-- Navigation Header -->
+    <header id="main-header"
+        class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="header-container" class="flex justify-between items-center h-20 transition-all duration-300">
+                <div class="flex items-center">
+                    <a href="index.html"
+                        class="text-3xl font-serif font-bold text-sky-600 dark:text-sky-400 tracking-tight flex items-center gap-2">
+                        <div
+                            class="w-8 h-8 bg-sky-600 dark:bg-sky-400 rounded-[10px] flex items-center justify-center text-white text-lg leading-none">
+                            W</div>
+                        elocity
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-10 items-center">
+                    <a href="index.html"
+                        class="nav-link text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400 font-bold transition">Home</a>
+                    <a href="about-us.html"
+                        class="nav-link text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400 font-bold transition">About
+                        Us</a>
+                    <a href="advanced-dna-testing.html"
+                        class="nav-link text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400 font-bold transition">DNA
+                        Test</a>
+                    <a href="contact-us.html"
+                        class="nav-link text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400 font-bold transition">Contact</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <!-- Dark mode toggle -->
+                    <button id="theme-toggle"
+                        class="p-2 rounded-[10px] hover:bg-slate-200 dark:hover:bg-slate-800 transition text-slate-500 dark:text-slate-400">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 01-1.415 1.415l-.708-.708a1 1 0 011.415-1.415l.708.708zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM15.78 15.78a1 1 0 011.415-1.415l.708.708a1 1 0 01-1.415 1.415l-.708-.708zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-4.22a1 1 0 011.415-1.415l.708.708a1 1 0 01-1.415 1.415l-.708-.708zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zM4.22 4.22a1 1 0 011.415-1.415l.708.708a1 1 0 01-1.415 1.415l-.708-.708zM10 5a5 5 0 100 10 5 5 0 000-10z">
+                            </path>
+                        </svg>
+                    </button>
+                    <!-- Mobile Menu toggle -->
+                    <button id="mobile-menu-btn"
+                        class="md:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-[10px] transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    <!-- Buy App -->
+                    <a href="advanced-dna-testing.html"
+                        class="hidden sm:inline-block bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-6 rounded-[10px] transition duration-200 shadow-[0_0_20px_rgba(14,165,233,0.4)]">
+                        Buy DNA Test
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-6">
+                <nav class="flex flex-col space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                    <a href="index.html"
+                        class="text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 font-bold hover:text-sky-500 transition">Home</a>
+                    <a href="about-us.html"
+                        class="text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 font-bold hover:text-sky-500 transition">About
+                        Us</a>
+                    <a href="advanced-dna-testing.html"
+                        class="text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 font-bold hover:text-sky-500 transition">DNA
+                        Test</a>
+                    <a href="contact-us.html"
+                        class="text-sm uppercase tracking-widest text-slate-700 dark:text-slate-300 font-bold hover:text-sky-500 transition">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="content-wrapper">
+        <div class="grid-container fade-in" style="animation-delay: 0.2s;">
+
+            <!-- Let's Talk Column -->
+            <div class="flex flex-col justify-center glass-panel">
+                <h1
+                    class="text-6xl md:text-8xl font-light tracking-tighter mb-6 text-slate-800 dark:text-white leading-none">
+                    Let's <br><span class="font-bold glow-text">Connect</span></h1>
+                <p
+                    class="text-xl md:text-2xl text-slate-600 dark:text-slate-300 font-light mb-12 max-w-lg leading-relaxed">
+                    Have any questions regarding our genomic insights, kits, or your 12-month wellness plan? Reach out
+                    directly to our dedicated helpdesk.
+                </p>
+
+                <div class="space-y-8">
+                    <div>
+                        <h4 class="text-sm uppercase tracking-widest text-sky-500 font-bold mb-2">Email Us</h4>
+                        <a href="mailto:info@welocitygenetics.com"
+                            class="text-2xl md:text-3xl font-light text-slate-800 dark:text-white hover:text-sky-500 dark:hover:text-sky-400 transition">info@welocitygenetics.com</a>
+                    </div>
+                    <div>
+                        <h4 class="text-sm uppercase tracking-widest text-pink-500 font-bold mb-2">Call Us</h4>
+                        <a href="tel:7304305295"
+                            class="text-2xl md:text-3xl font-light text-slate-800 dark:text-white hover:text-pink-500 dark:hover:text-pink-400 transition">730-430-5295</a>
+                    </div>
+                    <div>
+                        <h4 class="text-sm uppercase tracking-widest text-emerald-500 font-bold mb-2">Helpdesk Support
+                        </h4>
+                        <p class="text-lg md:text-xl font-light text-slate-600 dark:text-slate-300">Available Mon-Sat
+                            <br>10:00 AM - 6:00 PM (IST)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clean Form Column -->
+            <div class="flex flex-col justify-center mt-10 lg:mt-0 glass-panel">
+                <form
+                    class="space-y-12 lg:bg-white/30 lg:dark:bg-slate-800/30 lg:backdrop-blur-2xl lg:p-12 lg:rounded-[2rem] lg:border lg:border-white/60 lg:dark:border-slate-700/60 lg:shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition-all duration-300"
+                    action="#" method="POST">
+
+                    <div class="relative group">
+                        <input type="text" id="name" name="name" class="ghost-input" placeholder="Your Full Name"
+                            required>
+                    </div>
+
+                    <div class="relative group">
+                        <input type="email" id="email" name="email" class="ghost-input" placeholder="Your Email Address"
+                            required>
+                    </div>
+
+                    <div class="relative group">
+                        <input type="tel" id="mobile" name="mobile" class="ghost-input" placeholder="Your Mobile Number"
+                            required>
+                    </div>
+
+                    <div class="relative group">
+                        <textarea id="message" name="message" rows="4" class="ghost-input resize-none"
+                            placeholder="How can we assist you?" required></textarea>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit" class="submit-btn w-full sm:w-auto">Send Message</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Setup Three.js - Interactive Communication Pulse/Node
+        const canvas = document.getElementById('webgl-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0xf8fafc, 0.02);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 50; // Pull further back to see the whole node
+
+        // Define a core node made of concentric spheres and lines linking to mouse
+        const particleCount = 4000;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const originalPositions = new Float32Array(particleCount * 3);
+        const randoms = new Float32Array(particleCount);
+
+        for (let i = 0; i < particleCount; i++) {
+            const i3 = i * 3;
+            // Distribute into a sweeping, curved, horizontal DNA strand, scaled down to medium size
+            const tH = (i / particleCount) * Math.PI * 30; // Fewer twists to match smaller size
+            const rH = 5 + Math.sin(tH * 0.2) * 1.5; // Scaled down radius
+
+            // Reduced spread and tighter curve
+            const spreadX = ((i / particleCount) - 0.5) * 120;
+            const curveY = Math.sin(spreadX * 0.03) * 10;
+            const curveZ = Math.cos(spreadX * 0.03) * 15;
+
+            const strandPhase = (i % 2 === 0) ? 0 : Math.PI; // Double stranded
+            const scatter = 1.2;
+
+            // Rotation around the new flowing axis
+            const localY = Math.cos(tH + strandPhase) * rH;
+            const localZ = Math.sin(tH + strandPhase) * rH;
+
+            const x = spreadX + (Math.random() - 0.5) * scatter;
+            const y = curveY + localY + (Math.random() - 0.5) * scatter;
+            const z = curveZ + localZ + (Math.random() - 0.5) * scatter;
+
+            positions[i3] = x;
+            positions[i3 + 1] = y;
+            positions[i3 + 2] = z;
+
+            originalPositions[i3] = x;
+            originalPositions[i3 + 1] = y;
+            originalPositions[i3 + 2] = z;
+
+            randoms[i] = Math.random();
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('originalPosition', new THREE.BufferAttribute(originalPositions, 3));
+        geometry.setAttribute('random', new THREE.BufferAttribute(randoms, 1));
+
+        const material = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 },
+                color1: { value: new THREE.Color(0x38bdf8) }, // Sky
+                color2: { value: new THREE.Color(0xf472b6) }, // Pink
+                mouseTarget: { value: new THREE.Vector3(0, 0, 0) }
+            },
+            vertexShader: `
+                attribute vec3 originalPosition;
+                attribute float random;
+                
+                uniform float time;
+                uniform vec3 mouseTarget;
+                
+                varying float vRandom;
+                varying vec3 vPos;
+                
+                void main() {
+                    vRandom = random;
+                    vPos = originalPosition;
+                    
+                    // Core pulsing effect
+                    float pulse = sin(time * 2.0 + random * 6.28) * 1.5;
+                    vec3 targetPos = originalPosition + normalize(originalPosition) * pulse;
+                    
+                    // Attract particles that are "close" to mouse
+                    float distToMouse = distance(targetPos, mouseTarget);
+                    if (distToMouse < 20.0) {
+                        float pull = (20.0 - distToMouse) / 20.0;
+                         // Pull towards mouse slightly
+                        targetPos = mix(targetPos, mouseTarget, pull * 0.1 * random);
+                    }
+                    
+                    // Rotation
+                    float s = sin(time * 0.1);
+                    float c = cos(time * 0.1);
+                    
+                    float xnew = targetPos.x * c - targetPos.z * s;
+                    float znew = targetPos.x * s + targetPos.z * c;
+
+                    targetPos.x = xnew;
+                    targetPos.z = znew;
+
+                    vec4 mvPosition = modelViewMatrix * vec4(targetPos, 1.0);
+                    
+                    // Reduced particle base sizes by ~40%
+                    gl_PointSize = (2.5 + random * 3.5) * (50.0 / -mvPosition.z);
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
+            fragmentShader: `
+                uniform vec3 color1;
+                uniform vec3 color2;
+                
+                varying float vRandom;
+                varying vec3 vPos;
+                
+                void main() {
+                    float dist = length(gl_PointCoord - vec2(0.5));
+                    if (dist > 0.5) discard;
+                    
+                    vec3 finalColor = mix(color1, color2, vRandom);
+                    
+                    float alpha = (0.5 - dist) * 2.0;
+                    gl_FragColor = vec4(finalColor, alpha);
+                }
+            `,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particleSystem = new THREE.Points(geometry, material);
+        scene.add(particleSystem);
+
+        // Tracking mouse in 3D space
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2(-999, -999);
+        const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        const targetPoint = new THREE.Vector3();
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            raycaster.ray.intersectPlane(plane, targetPoint);
+        });
+
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        function updateTheme(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                themeToggleLightIcon.classList.remove('hidden');
+                themeToggleDarkIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeToggleLightIcon.classList.add('hidden');
+                themeToggleDarkIcon.classList.remove('hidden');
+            }
+            scene.fog.color.setHex(isDark ? 0x030712 : 0xf8fafc);
+            material.blending = isDark ? THREE.AdditiveBlending : THREE.NormalBlending;
+        }
+
+        let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        updateTheme(isDarkMode);
+
+        themeToggleBtn.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            updateTheme(isDarkMode);
+        });
+
+        // Mobile Menu Script
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            const headerContainer = document.getElementById('header-container');
+            if (window.scrollY > 50) {
+                headerContainer.classList.remove('h-20');
+                headerContainer.classList.add('h-14');
+            } else {
+                headerContainer.classList.add('h-20');
+                headerContainer.classList.remove('h-14');
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const clock = new THREE.Clock();
+
+        // Smoothly interpolate the mouse target passed to the shader
+        const smoothedTarget = new THREE.Vector3();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            material.uniforms.time.value = clock.getElapsedTime();
+
+            // Smoothly interpolate the mouse target passed to the shader for the ripple effect
+            smoothedTarget.lerp(targetPoint, 0.05);
+            material.uniforms.mouseTarget.value.copy(smoothedTarget);
+
+            // On PC, push the whole flowing DNA to the left so it doesn't overlap the form
+            // Also add a continuous slow panning motion on the X axis to make it "flow"
+            let targetX = window.innerWidth > 1024 ? -25.0 : 0.0;
+            const timeRaw = clock.getElapsedTime();
+
+            // Flowing endless pan
+            particleSystem.position.x = targetX + Math.sin(timeRaw * 0.1) * 10.0;
+
+            // Gentle ambient floating
+            particleSystem.position.y += ((Math.cos(timeRaw * 0.2) * 5.0) - particleSystem.position.y) * 0.05;
+
+            // Slow rotation to show depth
+            particleSystem.rotation.y = timeRaw * 0.05;
+            particleSystem.rotation.z = Math.sin(timeRaw * 0.1) * 0.1;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>
