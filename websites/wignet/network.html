@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network & Trainers | WIGNET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0fdfa', 100: '#ccfbf1', 500: '#14b8a6', 600: '#0d9488', 900: '#134e4a' },
+                        sand: { 50: '#fafaf9', 100: '#f5f5f4', 200: '#e7e5e4', 800: '#292524', 900: '#1c1917' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #fafaf9; color: #292524; scroll-behavior: smooth; }
+        .organic-card { background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); border: 1px solid rgba(0,0,0,0.02); }
+        .organic-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(20,184,166,0.08); }
+        h1, h2, h3, h4, .font-serif { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-sand-200 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center text-white font-serif font-bold text-xl">W</div>
+                    <span class="font-serif font-bold text-2xl text-sand-900">WIGNET</span>
+                </a>
+                <div class="hidden lg:flex space-x-10 items-center">
+                    <a href="genomics.html" class="text-sand-800 hover:text-brand-600 font-medium transition">Genomics</a>
+                    <a href="nutrition.html" class="text-sand-800 hover:text-brand-600 font-medium transition">Nutrition</a>
+                    <a href="network.html" class="text-brand-600 font-medium transition">Network</a>
+                    <a href="about.html" class="text-sand-800 hover:text-brand-600 font-medium transition">About Us</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="pt-40 pb-24 bg-brand-900 text-white text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10">
+            <div class="w-20 h-20 bg-brand-800 text-brand-100 rounded-full flex items-center justify-center mx-auto mb-8 border border-brand-700 shadow-xl shadow-brand-900">
+                <i data-lucide="briefcase" class="w-10 h-10"></i>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-8 font-serif leading-tight">Genomic <br><span class="italic font-normal text-brand-300">Entrepreneurship</span></h1>
+            <p class="text-xl text-brand-100 font-sans leading-relaxed max-w-2xl mx-auto">
+                Don't just learn the science. Build a deeply rewarding career. We empower individuals through the Wellness Wealth Matrix and interlink elite professionals across the Welocity Wellness Forum.
+            </p>
+        </div>
+    </section>
+
+    <!-- The Ecosystem Deep Dive -->
+    <section class="py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <span class="text-brand-600 font-bold uppercase tracking-widest text-sm block mb-4">Enterprise Structure</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-sand-900 mb-6 font-serif">A Sustainable Business <span class="italic text-brand-600">Blueprint</span></h2>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-10">
+                <!-- Ecosystem 1 -->
+                <div class="organic-card p-10 border border-sand-200 flex flex-col items-center text-center transition duration-500">
+                    <div class="w-20 h-20 bg-brand-50 rounded-full flex items-center justify-center text-brand-600 mb-8 mt-4">
+                        <i data-lucide="line-chart" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold font-serif mb-4 text-sand-900">Wellness Wealth Matrix</h3>
+                    <p class="font-sans text-sand-600 text-lg leading-relaxed mb-8 flex-grow">
+                        A highly specialized, proprietary compensation structure explicitly designed to generate verified health outcomes globally while building rapid, sustainable wealth concurrently within the booming genomics industry.
+                    </p>
+                    <button class="text-brand-600 font-bold hover:text-brand-800 transition flex items-center gap-2">View Matrix Metrics <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                </div>
+
+                <!-- Ecosystem 2 -->
+                <div class="organic-card p-10 border-2 border-brand-200 ring-4 ring-brand-50 shadow-xl shadow-brand-900/5 flex flex-col items-center text-center transform lg:-translate-y-8 bg-white relative z-10 transition duration-500">
+                    <div class="absolute top-0 inset-x-0 h-2 bg-brand-500 rounded-t-2xl"></div>
+                    <div class="w-20 h-20 bg-brand-600 text-white rounded-full flex items-center justify-center mb-8 mt-4 shadow-lg shadow-brand-500/30">
+                        <i data-lucide="users" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold font-serif mb-4 text-sand-900">Welocity Wellness Forum</h3>
+                    <p class="font-sans text-sand-600 text-lg leading-relaxed mb-8 flex-grow">
+                        An elite, exclusive academic forum gathering thousands of certified genomic wellness professionals. Participate in national symposiums to share clinical insights, dissect rare cases, and collectively improve clinical industry standards.
+                    </p>
+                    <button class="bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-full font-bold shadow-md transition-all">Join The Forum</button>
+                </div>
+
+                <!-- Ecosystem 3 -->
+                <div class="organic-card p-10 border border-sand-200 flex flex-col items-center text-center transition duration-500">
+                    <div class="w-20 h-20 bg-brand-50 rounded-full flex items-center justify-center text-brand-600 mb-8 mt-4">
+                        <i data-lucide="award" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold font-serif mb-4 text-sand-900">The Success Blueprint</h3>
+                    <p class="font-sans text-sand-600 text-lg leading-relaxed mb-8 flex-grow">
+                        (SAGE). Immersion-style, full-day intensive winners' workshops rigorously designed to guide professionals on operating their Genomic Wellness Enterprise ethically, scaling predictably, and acquiring clients.
+                    </p>
+                    <button class="text-brand-600 font-bold hover:text-brand-800 transition flex items-center gap-2">Explore Workshops <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Panel of Expert Trainers -->
+    <section class="py-32 bg-sand-50 border-t border-sand-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20">
+                <div class="max-w-2xl">
+                    <span class="text-brand-600 font-bold uppercase tracking-widest text-sm block mb-4">Leadership & Faculty</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-sand-900 mb-6 font-serif">WIGNET <span class="italic text-brand-600">Panel of Trainers</span></h2>
+                    <p class="text-sand-600 font-sans text-xl leading-relaxed">
+                        A fiercely dedicated, elite group of global health experts aggressively teaching, preaching, and practicing Genomic Wellness. Learn directly from those operating at the peak.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Detailed Trainer Cards -->
+                <div class="bg-white rounded-[2rem] overflow-hidden organic-card p-8 text-center border border-sand-100 group">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-[6px] border-sand-50 relative group-hover:border-brand-100 transition duration-300">
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300" alt="Trainer" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-2xl font-bold text-sand-900 font-serif mb-1">Dr. Sarah Jenkins</h4>
+                    <p class="text-brand-600 text-sm font-sans font-bold uppercase tracking-wide mb-4">Chief Medical Architect</p>
+                    <p class="text-sand-500 text-sm font-sans px-2 mb-6">Former Head of Genetics at Apex Medical. Specialist in oncology-genomic linkages.</p>
+                    <div class="flex justify-center gap-3">
+                        <a href="#" class="w-8 h-8 rounded-full bg-sand-100 flex items-center justify-center text-sand-500 hover:bg-brand-500 hover:text-white transition"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-sand-100 flex items-center justify-center text-sand-500 hover:bg-brand-500 hover:text-white transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[2rem] overflow-hidden organic-card p-8 text-center border border-sand-100 group">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-[6px] border-sand-50 relative group-hover:border-brand-100 transition duration-300">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=300" alt="Trainer" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-2xl font-bold text-sand-900 font-serif mb-1">Dr. Raj Patel</h4>
+                    <p class="text-brand-600 text-sm font-sans font-bold uppercase tracking-wide mb-4">Head of Nutrition</p>
+                    <p class="text-sand-500 text-sm font-sans px-2 mb-6">Pioneered the F.A.M.E protocols. Holds 3 patents in genetic dietary sequencing algorithms.</p>
+                    <div class="flex justify-center gap-3">
+                        <a href="#" class="w-8 h-8 rounded-full bg-sand-100 flex items-center justify-center text-sand-500 hover:bg-brand-500 hover:text-white transition"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[2rem] overflow-hidden organic-card p-8 text-center border border-sand-100 group">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6 border-[6px] border-sand-50 relative group-hover:border-brand-100 transition duration-300">
+                        <img src="https://images.unsplash.com/photo-1594824436951-7f12bc4170e5?auto=format&fit=crop&q=80&w=300" alt="Trainer" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-2xl font-bold text-sand-900 font-serif mb-1">Elena Rostova</h4>
+                    <p class="text-brand-600 text-sm font-sans font-bold uppercase tracking-wide mb-4">Enterprise Lead</p>
+                    <p class="text-sand-500 text-sm font-sans px-2 mb-6">Corporate executive turned Wellness Architect. Leads the SAGE workshop curriculums globally.</p>
+                    <div class="flex justify-center gap-3">
+                        <a href="#" class="w-8 h-8 rounded-full bg-sand-100 flex items-center justify-center text-sand-500 hover:bg-brand-500 hover:text-white transition"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-sand-100 flex items-center justify-center text-sand-500 hover:bg-brand-500 hover:text-white transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <!-- CTA Join Panel Card -->
+                <div class="bg-brand-50 rounded-[2rem] border-dashed border-2 border-brand-200 flex flex-col items-center justify-center p-8 text-center hover:bg-brand-100 transition cursor-pointer min-h-[400px]">
+                    <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 text-brand-600 shadow-lg shadow-brand-500/10">
+                        <i data-lucide="plus" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold text-sand-900 mb-3 font-serif">Join The Faculty</h4>
+                    <p class="text-sand-600 text-sm font-sans px-2 mb-6">Are you a recognized genetics professional looking to teach thousands? Apply to join our prestigious panel.</p>
+                    <span class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-full font-bold shadow-md transition-all text-sm inline-block">Submit Application</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Filler -->
+    <footer class="bg-white pt-24 pb-12 border-t border-sand-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-sand-200 pt-8 font-sans">
+            <p class="text-sm text-sand-500">Copyright © 2026 Wignet. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) nav.classList.add('shadow-md', 'py-1');
+            else nav.classList.remove('shadow-md', 'py-1');
+        });
+    </script>
+</body>
+</html>

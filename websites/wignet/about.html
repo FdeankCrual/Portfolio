@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | WIGNET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0fdfa', 100: '#ccfbf1', 500: '#14b8a6', 600: '#0d9488', 900: '#134e4a' },
+                        sand: { 50: '#fafaf9', 100: '#f5f5f4', 200: '#e7e5e4', 800: '#292524', 900: '#1c1917' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #fafaf9; color: #292524; scroll-behavior: smooth; }
+        .organic-card { background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); border: 1px solid rgba(0,0,0,0.02); }
+        h1, h2, h3, h4, .font-serif { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-sand-200 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center text-white font-serif font-bold text-xl">W</div>
+                    <span class="font-serif font-bold text-2xl text-sand-900">WIGNET</span>
+                </a>
+                <div class="hidden lg:flex space-x-10 items-center">
+                    <a href="genomics.html" class="text-sand-800 hover:text-brand-600 font-medium transition">Genomics</a>
+                    <a href="nutrition.html" class="text-sand-800 hover:text-brand-600 font-medium transition">Nutrition</a>
+                    <a href="network.html" class="text-sand-800 hover:text-brand-600 font-medium transition">Network</a>
+                    <a href="about.html" class="text-brand-600 font-medium transition">About Us</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="pt-40 pb-20 bg-sand-50">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-sand-200 bg-white text-sand-600 text-sm font-medium mb-6">
+                Established 2020
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-sand-900 leading-tight">The Seed <span class="text-brand-600 italic font-normal">Thought</span></h1>
+            <p class="text-xl text-sand-600 font-sans leading-relaxed max-w-2xl mx-auto">
+                WIGNET is an Institute with a difference. We are committed to creating a mass awareness amongst common people about the amazing benefits of genomic wellness across the world.
+            </p>
+        </div>
+    </section>
+
+    <!-- The Journey / Story -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="organic-card overflow-hidden h-[600px]">
+                    <img src="https://images.unsplash.com/photo-1574052957388-348da182b8a4?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700" alt="Founders working">
+                </div>
+                <div>
+                    <h2 class="text-4xl font-bold mb-8 font-serif text-sand-900">How It All <span class="italic text-brand-600">Began</span></h2>
+                    <p class="text-lg text-sand-600 font-sans leading-relaxed mb-6">
+                        The seed thought behind WIGNET (Welocity Institute of Genomic Nutrition and Entrepreneurship Training) stemmed from a simple, yet heartbreaking observation. Despite incredible advancements in modern medicine, chronic lifestyle diseases—diabetes, hypertension, obesity—were rising at unprecedented rates in India.
+                    </p>
+                    <p class="text-lg text-sand-600 font-sans leading-relaxed mb-6">
+                        We realized that the clinical approach was entirely reactive. People were being treated only after the symptoms appeared. True healthcare had to be predictive. It had to look at the very foundation of human life: our DNA.
+                    </p>
+                    <div class="bg-brand-50 p-6 rounded-2xl border-l-4 border-brand-500 mt-8">
+                        <p class="text-brand-900 font-serif italic text-xl">"What if we could teach professionals to decode genetic susceptibilities before they become diseases? What if food could act as the ultimate medicine?"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision & Mission -->
+    <section class="py-24 bg-sand-900 text-white relative overflow-hidden rounded-[3rem] mx-4 sm:mx-8 mb-24">
+        <!-- Decor pattern -->
+        <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+        
+        <div class="max-w-7xl mx-auto px-8 relative z-10">
+            <div class="grid md:grid-cols-2 gap-16">
+                <div class="bg-sand-800/50 p-12 rounded-[2rem] border border-sand-700/50 hover:bg-brand-900/50 transition">
+                    <div class="w-20 h-20 rounded-2xl bg-brand-500/20 flex items-center justify-center text-brand-400 mb-8">
+                        <i data-lucide="eye" class="w-10 h-10"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold mb-6 font-serif">Our Vision</h2>
+                    <p class="text-sand-300 font-sans leading-relaxed text-lg">
+                        Our vision is to aggressively create mass awareness amongst common people about the amazing lifecycle benefits of genomic wellness globally. We envision a society where predictive healthcare and precise nutritional input prevent catastrophic lifestyle illnesses entirely. We believe in a world where individuals take charge of their biology instead of becoming victims of generic medical statistics.
+                    </p>
+                </div>
+                
+                <div class="bg-sand-800/50 p-12 rounded-[2rem] border border-sand-700/50 hover:bg-brand-900/50 transition">
+                    <div class="w-20 h-20 rounded-2xl bg-brand-500/20 flex items-center justify-center text-brand-400 mb-8">
+                        <i data-lucide="target" class="w-10 h-10"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold mb-6 font-serif">Our Mission</h2>
+                    <p class="text-sand-300 font-sans leading-relaxed text-lg">
+                        To provide rigorous, career-oriented academic education in the rapidly growing field of Nutrigenomics. Our primary mission is to create thousands of skillful, empathetic nutrigenomics professionals. Through the Welocity Wellness ecosystem, we aim to empower passionate educators and wellness entrepreneurs to spread the science of living simple, gene-optimized, and fundamentally happy lives.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section class="py-24 bg-white text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="organic-card p-16 border border-brand-100 shadow-[0_10px_40px_rgba(20,184,166,0.1)]">
+                <i data-lucide="leaf" class="w-20 h-20 mx-auto mb-10 text-brand-500"></i>
+                <h2 class="text-4xl md:text-5xl font-bold mb-10 font-serif text-sand-900">Our Core Philosophy</h2>
+                <div class="w-24 h-1 bg-brand-200 mx-auto mb-10"></div>
+                <p class="text-3xl md:text-5xl font-serif italic text-brand-600 leading-tight">
+                    "Go Back to Nature. Let Food be Thy Medicine. Live a simple, organic, and happy life."
+                </p>
+                <div class="mt-12 text-sand-500 font-sans font-medium">— Embedded in the WIGNET DNA</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-sand-50 pt-24 pb-12 border-t border-sand-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16 font-sans">
+                <!-- Col 1 (Large) -->
+                <div class="lg:col-span-4">
+                    <div class="flex items-center gap-3 mb-8 cursor-pointer">
+                        <div class="w-10 h-10 rounded-full bg-brand-600 flex items-center justify-center text-white font-serif font-bold text-lg">W</div>
+                        <span class="font-bold text-2xl font-serif text-sand-900 tracking-tight">WIGNET</span>
+                    </div>
+                    <p class="text-sand-600 text-sm leading-relaxed mb-8 pr-4">
+                        WIGNET is an institute with a difference, operating out of Mumbai. We are relentlessly committed to delivering advanced, career-oriented academic education in the rapidly ascending field of Nutrigenomics.
+                    </p>
+                    <div class="space-y-4 text-sm text-sand-800 font-medium bg-white p-6 rounded-2xl border border-sand-100 shadow-sm">
+                        <p class="flex items-start gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-brand-600 flex-shrink-0"></i> 608, Corporate Annex, Behind Udyog Bhavan, Sonawala Cross Road, Goregaon East, Mumbai 400063</p>
+                        <div class="h-px bg-sand-200 my-2"></div>
+                        <p class="flex items-center gap-3"><i data-lucide="phone" class="w-4 h-4 text-brand-600"></i> +91 82912 86618 (Hindi)</p>
+                        <p class="flex items-center gap-3"><i data-lucide="phone" class="w-4 h-4 text-brand-600"></i> +91 82916 72060 (English)</p>
+                        <p class="flex items-center gap-3"><i data-lucide="mail" class="w-4 h-4 text-brand-600"></i> info@mywignet.com</p>
+                    </div>
+                </div>
+
+                <!-- Col 2 -->
+                <div class="lg:col-span-2 lg:col-start-6">
+                    <h4 class="text-sand-900 font-bold mb-6 font-serif text-lg tracking-wide border-b border-sand-200 pb-2 inline-block">Programs</h4>
+                    <ul class="space-y-4 text-sm text-sand-600 font-medium">
+                        <li><a href="genomics.html" class="hover:text-brand-600 transition flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3 text-sand-300"></i> The World of Genomics</a></li>
+                        <li><a href="genomics.html" class="hover:text-brand-600 transition flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3 text-sand-300"></i> CCNG Certification</a></li>
+                        <li><a href="nutrition.html" class="hover:text-brand-600 transition flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3 text-sand-300"></i> Food As Medicine</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3 -->
+                <div class="lg:col-span-2">
+                    <h4 class="text-sand-900 font-bold mb-6 font-serif text-lg tracking-wide border-b border-sand-200 pb-2 inline-block">Institute</h4>
+                    <ul class="space-y-4 text-sm text-sand-600 font-medium">
+                        <li><a href="about.html" class="hover:text-brand-600 transition flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3 text-sand-300"></i> About Wignet</a></li>
+                        <li><a href="#" class="hover:text-brand-600 transition flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3 text-sand-300"></i> Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-600 transition flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3 text-sand-300"></i> Student Portal</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4 -->
+                <div class="lg:col-span-3">
+                    <h4 class="text-sand-900 font-bold mb-6 font-serif text-lg tracking-wide border-b border-sand-200 pb-2 inline-block">Support</h4>
+                    <div class="bg-white p-6 rounded-2xl border border-sand-100 mb-6 shadow-sm">
+                        <ul class="space-y-3 text-sm text-sand-600 mb-0 font-medium">
+                            <li class="flex justify-between border-b border-sand-100 pb-2"><span>Mon - Fri</span> <span class="text-sand-900">10:00 am - 7:00 pm</span></li>
+                            <li class="flex justify-between border-b border-sand-100 pb-2 pt-1"><span>Sat</span> <span class="text-sand-900">10:00 am - 4:00 pm</span></li>
+                            <li class="flex justify-between pt-1"><span>Sun</span> <span class="text-brand-600 font-bold">Closed</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm text-sand-500 border-t border-sand-200 pt-8 mt-8 font-sans">
+                <p>Copyright © 2026 Welocity Institute of Genomic Nutrition. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) nav.classList.add('shadow-md', 'py-1');
+            else nav.classList.remove('shadow-md', 'py-1');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genomics & Courses | WIGNET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0fdfa', 100: '#ccfbf1', 500: '#14b8a6', 600: '#0d9488', 900: '#134e4a' },
+                        sand: { 50: '#fafaf9', 100: '#f5f5f4', 200: '#e7e5e4', 800: '#292524', 900: '#1c1917' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #fafaf9; color: #292524; scroll-behavior: smooth; }
+        .organic-card { background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); border: 1px solid rgba(0,0,0,0.02); }
+        h1, h2, h3, h4, .font-serif { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-sand-200 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center text-white font-serif font-bold text-xl">W</div>
+                    <span class="font-serif font-bold text-2xl text-sand-900">WIGNET</span>
+                </a>
+                <div class="hidden lg:flex space-x-10 items-center">
+                    <a href="genomics.html" class="text-brand-600 font-medium">Genomics</a>
+                    <a href="nutrition.html" class="text-sand-800 hover:text-brand-600 font-medium transition">Nutrition</a>
+                    <a href="network.html" class="text-sand-800 hover:text-brand-600 font-medium transition">Network</a>
+                    <a href="about.html" class="text-sand-800 hover:text-brand-600 font-medium transition">About Us</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="pt-40 pb-20 bg-sand-50 border-b border-sand-200">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="w-20 h-20 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse shadow-lg shadow-brand-500/20">
+                <i data-lucide="dna" class="w-10 h-10"></i>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-8 text-sand-900 leading-tight">The World of <br><span class="text-brand-600 italic">Genomics</span></h1>
+            <p class="text-xl text-sand-600 font-sans leading-relaxed max-w-3xl mx-auto">
+                Genomics is the profound study of the genomes of organisms. Its primary task is to determine the entire sequence of DNA and understand the unimaginably complex interaction of those genes within a biological system.
+            </p>
+        </div>
+    </section>
+
+    <!-- Detailed Explanation Section -->
+    <section class="py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="space-y-8">
+                    <div class="text-brand-600 font-bold uppercase tracking-widest text-sm">The Medical Revolution</div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-sand-900 font-serif leading-tight">Advantage <span class="italic font-normal">Nutrigenomics</span></h2>
+                    <p class="text-sand-600 font-sans text-lg leading-relaxed">
+                        Nutritional genomics or nutrigenomics is a cutting-edge multidisciplinary science. It acts as the critical bridge dealing with the study of how foods affect our genes—and inversely, how our individual genetic differences affect the way we respond to nutrients in the foods we consume.
+                    </p>
+                    <p class="text-sand-600 font-sans text-lg leading-relaxed">
+                        It has fundamentally revolutionized modern healthcare. Through advanced, highly accurate DNA mapping, practitioners can now mathematically predict an individual's susceptibility to lifestyle diseases long before symptoms physically manifest. Stop treating the disease. Start treating the blueprint.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mt-10">
+                        <div class="bg-sand-50 p-6 rounded-2xl border border-sand-100">
+                            <i data-lucide="activity" class="w-8 h-8 text-brand-500 mb-4"></i>
+                            <h4 class="font-bold text-sand-900 mb-2 font-serif">Predictive</h4>
+                            <p class="text-sm text-sand-600 font-sans">Foresee cardiac, diabetic, and weight risks years in advance.</p>
+                        </div>
+                        <div class="bg-sand-50 p-6 rounded-2xl border border-sand-100">
+                            <i data-lucide="shield" class="w-8 h-8 text-brand-500 mb-4"></i>
+                            <h4 class="font-bold text-sand-900 mb-2 font-serif">Preventative</h4>
+                            <p class="text-sm text-sand-600 font-sans">Silence harmful gene expression through targeted diet.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="organic-card p-12 bg-brand-900 text-white relative overflow-hidden shadow-2xl shadow-brand-900/20">
+                    <div class="absolute -top-10 -right-10 opacity-10 blur-sm">
+                        <i data-lucide="microscope" class="w-80 h-80 text-brand-100"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-4xl font-bold mb-10 font-serif text-brand-50">Why Map Your <span class="text-brand-300">DNA?</span></h3>
+                        <ul class="space-y-6 font-sans text-brand-100/90 text-lg">
+                            <li class="flex items-start gap-4">
+                                <div class="bg-brand-800 p-2 rounded-lg flex-shrink-0"><i data-lucide="check" class="w-6 h-6 text-brand-300"></i></div> 
+                                <div><strong class="text-white block mb-1">Understand Hidden Risks</strong> Identify genetic predispositions passed down through generations.</div>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <div class="bg-brand-800 p-2 rounded-lg flex-shrink-0"><i data-lucide="zap" class="w-6 h-6 text-brand-300"></i></div> 
+                                <div><strong class="text-white block mb-1">Optimize Nutrient Intake</strong> Stop wasting money on generic supplements your body cannot metabolize.</div>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <div class="bg-brand-800 p-2 rounded-lg flex-shrink-0"><i data-lucide="clock" class="w-6 h-6 text-brand-300"></i></div> 
+                                <div><strong class="text-white block mb-1">Lifecycle Management</strong> Prepare early interventions for middle-age and senior healthcare.</div>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <div class="bg-brand-800 p-2 rounded-lg flex-shrink-0"><i data-lucide="users" class="w-6 h-6 text-brand-300"></i></div> 
+                                <div><strong class="text-white block mb-1">Smart Kids Planning</strong> Map your child's innate metabolic traits for lifelong advantages.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificate Course Details -->
+    <section class="py-32 bg-sand-50 rounded-[3rem] mx-4 sm:mx-8 mb-24 overflow-hidden relative">
+        <!-- Abstract shape -->
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-100/50 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-20">
+                <span class="bg-white border text-brand-600 px-4 py-1 rounded-full text-sm font-bold tracking-wider mb-6 inline-block shadow-sm">CAREER DEFINING</span>
+                <h2 class="text-5xl font-bold text-sand-900 mb-6 font-serif">Certificate Course in <span class="text-brand-600 italic">Nutrigenomics</span></h2>
+                <p class="text-sand-600 font-sans text-xl max-w-4xl mx-auto leading-relaxed">
+                    WIGNET, for the highly anticipated first time in India, offers a comprehensive Certificate Course in Nutritional Genomics (CCNG). This is engineered for ambitious, passionate, and career-driven individuals looking to enter the billion-dollar predictive wellness industry.
+                </p>
+            </div>
+
+            <!-- Deep Curriculum Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <!-- Module Highlight -->
+                <div class="organic-card p-10 border border-sand-200 hover:border-brand-300 flex flex-col items-start bg-white/60 backdrop-blur-sm">
+                    <div class="text-brand-600 font-bold font-serif text-6xl mb-6 opacity-20">01</div>
+                    <h4 class="text-2xl font-bold text-sand-900 mb-4 font-serif">Foundations of Genetics</h4>
+                    <p class="text-sand-600 font-sans leading-relaxed mb-6">Learn the molecular basis of inheritance, DNA sequencing tech, and how traits are passed across generations in a clinical context.</p>
+                    <ul class="text-sm font-sans text-sand-500 space-y-2 mt-auto">
+                        <li class="flex gap-2"><i data-lucide="minus" class="w-4 h-4 text-brand-400"></i> Mendelian Genetics</li>
+                        <li class="flex gap-2"><i data-lucide="minus" class="w-4 h-4 text-brand-400"></i> DNA vs RNA mapping</li>
+                        <li class="flex gap-2"><i data-lucide="minus" class="w-4 h-4 text-brand-400"></i> The Human Genome Project</li>
+                    </ul>
+                </div>
+
+                <div class="organic-card p-10 border border-brand-200 ring-2 ring-brand-50 shadow-lg shadow-brand-100/50 flex flex-col items-start bg-white">
+                    <div class="absolute top-0 right-0 bg-brand-50 text-brand-600 text-xs font-bold px-4 py-1 rounded-bl-xl border-l border-b border-brand-100">CORE MODULE</div>
+                    <div class="text-brand-600 font-bold font-serif text-6xl mb-6 opacity-30">02</div>
+                    <h4 class="text-2xl font-bold text-sand-900 mb-4 font-serif">Nutritional Therapies</h4>
+                    <p class="text-sand-600 font-sans leading-relaxed mb-6">Master the connection between dietary compounds and gene expression. Learn how food acts as biological software.</p>
+                    <ul class="text-sm font-sans text-sand-500 space-y-2 mt-auto">
+                        <li class="flex gap-2"><i data-lucide="minus" class="w-4 h-4 text-brand-600"></i> Macronutrient Synthesis</li>
+                        <li class="flex gap-2"><i data-lucide="minus" class="w-4 h-4 text-brand-600"></i> Methylation & Epigenetics</li>
+                        <li class="flex gap-2"><i data-lucide="minus" class="w-4 h-4 text-brand-600"></i> Gene-Silencing via Diet</li>
+                    </ul>
+                </div>
+
+                <div class="organic-card p-10 border border-sand-200 hover:border-brand-300 flex flex-col items-start bg-white/60 backdrop-blur-sm">
+                    <div class="text-brand-600 font-bold font-serif text-6xl mb-6 opacity-20">03</div>
+                    <h4 class="text-2xl font-bold text-sand-900 mb-4 font-serif">Counseling & Practice</h4>
+                    <p class="text-sand-600 font-sans leading-relaxed mb-6">Hands-on practical training reading raw saliva-based DNA reports and prescribing actionable, safe interventions to clients.</p>
+                    <ul class="text-sm font-sans text-sand-500 space-y-2 mt-auto">
+                        <li class="flex gap-2"><i data-lucide="minus" class="w-4 h-4 text-brand-400"></i> Report Interpretation</li>
+                        <li class="flex gap-2"><i data-lucide="minus" class="w-4 h-4 text-brand-400"></i> Client Communication</li>
+                        <li class="flex gap-2"><i data-lucide="minus" class="w-4 h-4 text-brand-400"></i> Ethics and Privacy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Enrollment Stats/Banner -->
+            <div class="bg-brand-900 rounded-[2rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between text-white shadow-xl shadow-brand-900/10">
+                <div class="mb-8 md:mb-0 max-w-xl text-center md:text-left">
+                    <h3 class="text-3xl font-serif font-bold mb-4">Ready to pioneer the future of wellness?</h3>
+                    <p class="text-brand-100 font-sans text-lg">Join the upcoming summer cohort. Spots are strictly limited to ensure high-quality practical training.</p>
+                </div>
+                <div class="flex-shrink-0">
+                    <a href="#" class="inline-flex items-center gap-3 bg-white text-sand-900 hover:bg-brand-50 px-10 py-5 rounded-full font-sans font-bold transition-all shadow-lg text-lg">
+                        Apply for CCNG Now <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white pt-24 pb-12 border-t border-sand-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 font-sans">
+                <!-- Col 1 -->
+                <div>
+                    <div class="flex items-center gap-2 mb-6 cursor-pointer">
+                        <div class="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center text-white font-serif font-bold text-sm">W</div>
+                        <span class="font-bold text-xl font-serif text-sand-900">WIGNET</span>
+                    </div>
+                </div>
+
+                <!-- Col 2 -->
+                <div>
+                    <h4 class="text-sand-900 font-bold mb-6 font-serif">Programs</h4>
+                    <ul class="space-y-3 text-sm text-sand-600">
+                        <li><a href="#" class="hover:text-brand-600 transition">The World of Genomics</a></li>
+                        <li><a href="#" class="hover:text-brand-600 transition">Certificate Course</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3 -->
+                <div>
+                    <h4 class="text-sand-900 font-bold mb-6 font-serif">Quick Links</h4>
+                    <ul class="space-y-3 text-sm text-sand-600">
+                        <li><a href="about.html" class="hover:text-brand-600 transition">About Wignet</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm text-sand-500 border-t border-sand-200 pt-8 font-sans">
+                <p>Copyright © 2026 Wignet. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) nav.classList.add('shadow-md', 'py-1');
+            else nav.classList.remove('shadow-md', 'py-1');
+        });
+    </script>
+</body>
+</html>
